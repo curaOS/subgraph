@@ -35,7 +35,7 @@ type NFT @entity {
   reference_hash: String
 
   # Ownership
-  owner_id: Account!
+  owner: Account!
   creator: Account!
   prev_owner: Account!
 
@@ -61,7 +61,7 @@ type Account @entity {
   total_supply_for_owner: BigInt!
 
   # Relationships
-  nftOwnership: [NFTOwnership!] @derivedFrom(field: "account")
+  nftOwnership: [NFTOwnership!] @derivedFrom(field: "owner")
   createdNfts: [NFT!] @derivedFrom(field: "creator")
 }
 
