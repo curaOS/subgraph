@@ -71,9 +71,15 @@ type Activity @entity {
   type: ActivityType!
   createdAt: BigInt!
 
-  #transfer activity
-  transferFrom: Bytes
-  transferTo: Bytes
+  # mint activity
+  mintBy: Account
+
+  # burn activity
+  burnBy: Account
+
+  # transfer activity
+  transferFrom: Account
+  transferTo: Account
 
   transactionHash: Bytes!
 }
