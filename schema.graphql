@@ -1,0 +1,26 @@
+type NFTContract @entity {
+  id: ID!
+  spec: String!
+  name: String!
+  symbol: String!
+  icon: String
+  base_uri: String
+  reference: String
+  reference_hash: String
+}
+
+type NFT @entity {
+  id: ID!
+  title: String
+  description: String
+  media: String
+  media_hash: String
+  copies: Number
+  issued_at: Number
+  expires_at: Number
+  starts_at: Number
+  updated_at: Number
+  extra: String
+  reference: String
+  reference_hash: String
+}
