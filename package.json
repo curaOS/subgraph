@@ -1,0 +1,13 @@
+{
+  "name": "subgraph",
+  "version": "0.0.0",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy curaOS/subgraph --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.25.1",
+    "@graphprotocol/graph-ts": "^0.24.1"
+  }
+}
