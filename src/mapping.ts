@@ -1,4 +1,5 @@
-import { near, log } from "@graphprotocol/graph-ts";
+import { near, log, json } from "@graphprotocol/graph-ts";
+import { handleMethod } from "./handlers";
 
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
   const actions = receipt.receipt.actions;
@@ -19,7 +20,6 @@ function handleAction(
   blockHeader: near.BlockHeader,
   outcome: near.ExecutionOutcome
 ): void {
-  // If the user didn't call a method
   if (action.kind != near.ActionKind.FUNCTION_CALL) {
     log.info("Early return: {}", ["Not a function call"]);
     return;
@@ -27,9 +27,12 @@ function handleAction(
 
   const functionCall = action.toFunctionCall();
   const methodName = functionCall.methodName.toString();
+  const args = json.try_fromBytes(functionCall.args);
 
-  if (methodName == "claim_media") {
-  } else {
-    log.info("Unhandled method: {}", [methodName]);
-  }
+  log.error("Method called: {}, With args: {}", [
+    methodName,
+    args.value.toString(),
+  ]);
+
+  handleMethod(methodName);
 }

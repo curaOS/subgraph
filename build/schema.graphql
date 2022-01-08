@@ -1,0 +1,92 @@
+type NFTContract @entity {
+  id: ID!
+
+  # NEP-177
+  spec: String!
+  name: String!
+  symbol: String!
+  icon: String
+  base_uri: String
+  reference: String
+  reference_hash: String
+
+  # Stats
+  total_supply: BigInt!
+
+  # Relationships
+  nfts: [NFT!]! @derivedFrom(field: "contract")
+}
+
+type NFT @entity {
+  id: ID!
+
+  # NEP-177
+  title: String
+  description: String
+  media: String
+  media_hash: String
+  copies: BigInt
+  issued_at: BigInt
+  expires_at: BigInt
+  starts_at: BigInt
+  updated_at: BigInt
+  extra: String
+  reference: String
+  reference_hash: String
+
+  # Ownership
+  owner: Account!
+  creator: Account!
+  prev_owner: Account!
+
+  # Relationships
+  contract: NFTContract!
+  ownership: [NFTOwnership!] @derivedFrom(field: "nft")
+
+  # Todo:
+  # - Add market (royalty, isOnSale, lastPrice, askedPrice...)
+}
+
+type NFTOwnership @entity {
+  id: ID!
+  account: Account!
+  nft: NFT
+}
+
+type Account @entity {
+  id: ID!
+  address: Bytes!
+  
+  # Stats
+  total_supply_for_owner: BigInt!
+
+  # Relationships
+  nftOwnership: [NFTOwnership!] @derivedFrom(field: "account")
+  createdNfts: [NFT!] @derivedFrom(field: "creator")
+}
+
+type Activity @entity {
+  id: ID!
+  nft: NFT
+  type: ActivityType!
+  createdAt: BigInt!
+
+  # mint activity
+  mintBy: Account
+
+  # burn activity
+  burnBy: Account
+
+  # transfer activity
+  transferFrom: Account
+  transferTo: Account
+
+  transactionHash: Bytes!
+}
+
+
+enum ActivityType @entity {
+  mint
+  burn
+  transfer
+}
