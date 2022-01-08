@@ -61,7 +61,7 @@ type Account @entity {
   total_supply_for_owner: BigInt!
 
   # Relationships
-  nftOwnership: [NFTOwnership!] @derivedFrom(field: "owner")
+  nftOwnership: [NFTOwnership!] @derivedFrom(field: "account")
   createdNfts: [NFT!] @derivedFrom(field: "creator")
 }
 
