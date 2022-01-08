@@ -17,5 +17,8 @@ dataSources:
       entities:
         - NFTContract
         - NFT
+        - NFTOwnership
+        - Account
+        - Activity
       receiptHandlers:
         - handler: handleReceipt
