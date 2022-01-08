@@ -1,0 +1,21 @@
+specVersion: 0.0.2
+description: Subgraph for Cura NFT
+repository: https://github.com/curaOS/subgraph.git
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: near
+    network: near-testnet
+    name: receipts
+    source:
+      account: 0.share-nft.testnet
+      startBlock: 78120402
+    mapping:
+      file: ./src/mapping.ts
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFTContract
+        - NFT
+      receiptHandlers:
+        - handler: handleReceipt
