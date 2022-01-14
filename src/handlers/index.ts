@@ -1,6 +1,7 @@
-import mint from "./NFT/mint";
-import transfer from "./NFT/transfer";
-import burn from "./NFT/burn";
+import init from "./init";
+import mint from "./mint";
+import transfer from "./transfer";
+import burn from "./burn";
 
 import { JSONValue, log } from "@graphprotocol/graph-ts";
 import { assert_json_object } from "../utils/assert";
@@ -25,6 +26,11 @@ export function handleEvent(event: JSONValue, contractAdress: string): void {
     eventName,
     contractAdress,
   ]);
+
+  if (eventName == "init") {
+    init(eventData, contractAdress);
+    return;
+  }
 
   if (eventName == "nft_mint") {
     mint(eventData, contractAdress);
