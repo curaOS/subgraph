@@ -15,10 +15,9 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - NFTContract
-        - NFT
-        - NFTOwnership
+        - NftContract
+        - Nft
         - Account
-        - Activity
+        - History
       receiptHandlers:
         - handler: handleReceipt
