@@ -1,5 +1,13 @@
-import { near, log, json } from "@graphprotocol/graph-ts";
-import { handleMethod } from "./handlers";
+import {
+  near,
+  log,
+  json,
+  JSONValueKind,
+  JSONValue,
+} from "@graphprotocol/graph-ts";
+import { handleEvent } from "./handlers";
+
+import { assert_function_call, assert_json_object } from "./utils/assert";
 
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
   const actions = receipt.receipt.actions;
@@ -20,19 +28,14 @@ function handleAction(
   blockHeader: near.BlockHeader,
   outcome: near.ExecutionOutcome
 ): void {
-  if (action.kind != near.ActionKind.FUNCTION_CALL) {
-    log.info("Early return: {}", ["Not a function call"]);
-    return;
-  }
+  if (!assert_function_call(action)) return;
 
-  const functionCall = action.toFunctionCall();
-  const methodName = functionCall.methodName.toString();
-  const args = json.try_fromBytes(functionCall.args);
+  // Parse the json object from receipt logs
+  const event = json.fromString(outcome.logs[0]);
 
-  log.error("Method called: {}, With args: {}", [
-    methodName,
-    args.value.toString(),
-  ]);
+  // Get the contract name
+  const contractAdress = receipt.receiverId;
 
-  handleMethod(methodName);
+  // Event handler that maps data to GraphQl entities
+  handleEvent(event, contractAdress);
 }

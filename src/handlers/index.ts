@@ -1,17 +1,49 @@
-import handleMint from "./NFT/mint";
-import handleTransfer from "./NFT/transfer";
-import handleBurn from "./NFT/burn";
+import mint from "./NFT/mint";
+import transfer from "./NFT/transfer";
+import burn from "./NFT/burn";
 
-import { log } from "@graphprotocol/graph-ts";
+import { JSONValue, log } from "@graphprotocol/graph-ts";
+import { assert_json_object } from "../utils/assert";
 
-export function handleMethod(methodName: string): void {
-  if (methodName == "claim_media") {
-    handleMint();
-  } else if (methodName == "burn") {
-    handleBurn();
-  } else if (methodName == "transfer") {
-    handleTransfer();
-  } else {
-    log.error("Unhandled smart contract method: {}", [methodName]);
+export function handleEvent(event: JSONValue, contractAdress: string): void {
+  if (!assert_json_object(event, "logs.event")) return;
+
+  // Get the event name
+  const eventName = event
+    .toObject()
+    .get("event")!
+    .toString();
+
+  // Get the event data
+  const eventData = event
+    .toObject()
+    .get("data")!
+    .toArray()[0];
+  if (!assert_json_object(eventData, "logs.event.data")) return;
+
+  log.info("Event triggered: {}, Contract Adress: {}", [
+    eventName,
+    contractAdress,
+  ]);
+
+  if (eventName == "nft_mint") {
+    mint(eventData, contractAdress);
+    return;
   }
+
+  if (eventName == "burn") {
+    burn();
+    return;
+  }
+
+  if (eventName == "transfer") {
+    transfer();
+    return;
+  }
+
+  // If event name is unknown
+  log.warning("Unhandled event: {}, Contract Adress: {}", [
+    eventName,
+    contractAdress,
+  ]);
 }

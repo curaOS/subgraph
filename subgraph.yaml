@@ -8,8 +8,8 @@ dataSources:
     network: near-testnet
     name: receipts
     source:
-      account: 0.share-nft.testnet
-      startBlock: 78134000
+      account: vgr1.atestraf.testnet
+      startBlock: 78870187
     mapping:
       file: ./src/mapping.ts
       apiVersion: 0.0.5
