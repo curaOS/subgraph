@@ -15,17 +15,36 @@ export function assert_function_call(
   return true;
 }
 
-// Assert that the json value is an object
-export function assert_json_object(
-  value: JSONValue,
+// Assert that the json value is a specefic type
+export function assert_json(
+  input: JSONValue,
+  type: string,
   msg: string = ""
 ): boolean {
-  if (value.kind != JSONValueKind.OBJECT) {
-    log.warning(`Not a json object: {}, message: {}`, [
-      value.kind.toString(),
-      msg,
-    ]);
-    return false;
+  if (type == "string" && input.kind == JSONValueKind.STRING) {
+    return true;
   }
-  return true;
+  if (type == "bool" && input.kind == JSONValueKind.BOOL) {
+    return true;
+  }
+  if (type == "null" && input.kind == JSONValueKind.NULL) {
+    return true;
+  }
+  if (type == "number" && input.kind == JSONValueKind.NUMBER) {
+    return true;
+  }
+  if (type == "array" && input.kind == JSONValueKind.ARRAY) {
+    return true;
+  }
+  if (type == "object" && input.kind != JSONValueKind.STRING) {
+    return true;
+  }
+
+  log.warning(`Not a json {}: {}, message: {}`, [
+    type,
+    input.kind.toString(),
+    msg,
+  ]);
+
+  return false;
 }
