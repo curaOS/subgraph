@@ -1,4 +1,4 @@
-type NFTContract @entity {
+type NftContract @entity {
   id: ID!
 
   # NEP-177
@@ -8,66 +8,56 @@ type NFTContract @entity {
   icon: String
   base_uri: String
   reference: String
-  reference_hash: String
+  packages_script: String
+  render_script: String
+  style_css: String
+  parameters: String
 
   # Stats
   total_supply: BigInt!
 
   # Relationships
-  nfts: [NFT!]! @derivedFrom(field: "contract")
+  nfts: [Nft!]! @derivedFrom(field: "contract")
 }
 
-type NFT @entity {
+type Nft @entity {
   id: ID!
 
-  # NEP-177
+  # Metadata
   title: String
   description: String
-  media: String
-  media_hash: String
+  media: String!
   copies: BigInt
-  issued_at: BigInt
-  expires_at: BigInt
-  starts_at: BigInt
-  updated_at: BigInt
   extra: String
   reference: String
-  reference_hash: String
 
   # Ownership
   owner: Account!
   creator: Account!
-  prev_owner: Account!
+  prev_owner: Account
 
   # Relationships
-  contract: NFTContract!
-  ownership: [NFTOwnership!] @derivedFrom(field: "nft")
+  contract: NftContract!
 
   # Todo:
   # - Add market (royalty, isOnSale, lastPrice, askedPrice...)
 }
 
-type NFTOwnership @entity {
-  id: ID!
-  account: Account!
-  nft: NFT
-}
-
 type Account @entity {
   id: ID!
   address: Bytes!
-  
+
   # Stats
-  total_supply_for_owner: BigInt!
+  total_supply: BigInt!
 
   # Relationships
-  nftOwnership: [NFTOwnership!] @derivedFrom(field: "account")
-  createdNfts: [NFT!] @derivedFrom(field: "creator")
+  ownedNfts: [Nft!] @derivedFrom(field: "owner")
+  createdNfts: [Nft!] @derivedFrom(field: "creator")
 }
 
-type Activity @entity {
+type History @entity {
   id: ID!
-  nft: NFT
+  nft: Nft
   type: ActivityType!
   createdAt: BigInt!
 
@@ -83,7 +73,6 @@ type Activity @entity {
 
   transactionHash: Bytes!
 }
-
 
 enum ActivityType @entity {
   mint

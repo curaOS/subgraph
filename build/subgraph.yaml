@@ -8,17 +8,16 @@ dataSources:
     network: near-testnet
     name: receipts
     source:
-      account: 0.share-nft.testnet
-      startBlock: 78134000
+      account: vgr1.atestraf.testnet
+      startBlock: 78920663
     mapping:
       file: receipts\receipts.wasm
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - NFTContract
-        - NFT
-        - NFTOwnership
+        - NftContract
+        - Nft
         - Account
-        - Activity
+        - History
       receiptHandlers:
         - handler: handleReceipt
