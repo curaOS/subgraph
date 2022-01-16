@@ -4,10 +4,10 @@ import transfer from "./transfer";
 import burn from "./burn";
 
 import { JSONValue, log } from "@graphprotocol/graph-ts";
-import { assert_json_object } from "../utils/assert";
+import { assert_json } from "../utils/assert";
 
 export function handleEvent(event: JSONValue, contractAdress: string): void {
-  if (!assert_json_object(event, "logs.event")) return;
+  if (!assert_json(event, "object", "logs.event")) return;
 
   // Get the event name
   const eventName = event
@@ -20,14 +20,14 @@ export function handleEvent(event: JSONValue, contractAdress: string): void {
     .toObject()
     .get("data")!
     .toArray()[0];
-  if (!assert_json_object(eventData, "logs.event.data")) return;
+  if (!assert_json(eventData, "object", "logs.event.data")) return;
 
   log.info("Event triggered: {}, Contract Adress: {}", [
     eventName,
     contractAdress,
   ]);
 
-  if (eventName == "init") {
+  if (eventName == "nft_init") {
     init(eventData, contractAdress);
     return;
   }
