@@ -8,7 +8,10 @@ type NftContract @entity {
   icon: String
   base_uri: String
   reference: String
-  reference_hash: String
+  packages_script: String
+  render_script: String
+  style_css: String
+  parameters: String
 
   # Stats
   total_supply: BigInt!
@@ -31,7 +34,7 @@ type Nft @entity {
   # Ownership
   owner: Account!
   creator: Account!
-  prev_owner: Account!
+  prev_owner: Account
 
   # Relationships
   contract: NftContract!

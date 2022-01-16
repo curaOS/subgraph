@@ -9,7 +9,7 @@ dataSources:
     name: receipts
     source:
       account: vgr1.atestraf.testnet
-      startBlock: 78870187
+      startBlock: 78920663
     mapping:
       file: ./src/mapping.ts
       apiVersion: 0.0.5
