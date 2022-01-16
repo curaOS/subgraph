@@ -5,6 +5,8 @@ import {
   TypedMapEntry,
 } from "@graphprotocol/graph-ts";
 import { Nft, NftContract } from "../../generated/schema";
+import { assert_json } from "../utils/assert";
+import { stringifyJson } from "../utils/debug";
 
 export default function mint(
   event_data: JSONValue,
@@ -29,8 +31,6 @@ export default function mint(
   for (let i = 0; i < nfts.length; i++) {
     save_nft(nfts[i], contractAdress);
   }
-
-  // log.warning(`logs.event.data = {}`, [tokenMetadata.get("title")!.toString()]);
 }
 
 function save_nft(token: JSONValue, contractAdress: string): void {
@@ -42,21 +42,33 @@ function save_nft(token: JSONValue, contractAdress: string): void {
 
   // map token object into variables
   const entries = token.toObject().entries;
+
   for (let i = 0; i < entries.length; i++) {
-    if ((entries[i].key = "id")) {
+    if (entries[i].key == "id") {
+      // Id is required or indexing fail
+      if (!assert_json(entries[i].value, "string")) return;
       id = entries[i].value.toString();
     }
-    if ((entries[i].key = "metadata")) {
+    if (entries[i].key == "metadata") {
+      // metadata is required
+      if (!assert_json(entries[i].value, "object")) return;
       metadata = entries[i].value.toObject().entries;
     }
-    if ((entries[i].key = "owner_id")) {
+    if (entries[i].key == "owner_id") {
+      // owner is required
+      if (!assert_json(entries[i].value, "string")) return;
       owner = entries[i].value.toString();
     }
-    if ((entries[i].key = "creator_id")) {
+    if (entries[i].key == "creator_id") {
+      // creator is required
+      if (!assert_json(entries[i].value, "string")) return;
       creator = entries[i].value.toString();
     }
-    if ((entries[i].key = "prev_owner_id")) {
-      prev_owner = entries[i].value.toString();
+    if (entries[i].key == "prev_owner_id") {
+      // prev_owner is not required
+      prev_owner = assert_json(entries[i].value, "string")
+        ? entries[i].value.toString()
+        : "";
     }
   }
 
@@ -66,22 +78,39 @@ function save_nft(token: JSONValue, contractAdress: string): void {
   // Metadata
   for (let i = 0; i < metadata.length; i++) {
     if (metadata[i].key == "title") {
-      nft.title = metadata[i].value.toString();
+      // not required
+      nft.title = assert_json(metadata[i].value, "string")
+        ? metadata[i].value.toString()
+        : "";
     }
     if (metadata[i].key == "description") {
-      nft.description = metadata[i].value.toString();
+      // not required
+      nft.description = assert_json(metadata[i].value, "string")
+        ? metadata[i].value.toString()
+        : "";
     }
     if (metadata[i].key == "media") {
+      // media is required or indexing fail
+      if (!assert_json(metadata[i].value, "string")) return;
       nft.media = metadata[i].value.toString();
     }
     if (metadata[i].key == "copies") {
-      nft.copies = metadata[i].value.toBigInt();
+      // not required
+      nft.copies = assert_json(metadata[i].value, "number")
+        ? metadata[i].value.toBigInt()
+        : null;
     }
     if (metadata[i].key == "extra") {
-      nft.extra = metadata[i].value.toString();
+      // not required
+      nft.extra = assert_json(metadata[i].value, "string")
+        ? metadata[i].value.toString()
+        : "";
     }
     if (metadata[i].key == "reference") {
-      nft.reference = metadata[i].value.toString();
+      // not required
+      nft.reference = assert_json(metadata[i].value, "string")
+        ? metadata[i].value.toString()
+        : "";
     }
   }
 
