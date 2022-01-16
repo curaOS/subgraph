@@ -1,13 +1,7 @@
-import {
-  near,
-  log,
-  json,
-  JSONValueKind,
-  JSONValue,
-} from "@graphprotocol/graph-ts";
+import { near, json } from "@graphprotocol/graph-ts";
 import { handleEvent } from "./handlers";
 
-import { assert_function_call, assert_json_object } from "./utils/assert";
+import { assert_function_call } from "./utils/assert";
 
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
   const actions = receipt.receipt.actions;
@@ -29,6 +23,10 @@ function handleAction(
   outcome: near.ExecutionOutcome
 ): void {
   if (!assert_function_call(action)) return;
+
+  if (!outcome.logs[0]) {
+    return;
+  }
 
   // Parse the json object from receipt logs
   const event = json.fromString(outcome.logs[0]);
