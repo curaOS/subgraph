@@ -35,8 +35,11 @@ function update_nft(
   id: string,
   new_owner_id: string,
   old_owner_id: string
-): Nft {
+): Nft | null {
   let nft = Nft.load(id);
+  if (!nft) {
+    return null;
+  }
   nft.owner = new_owner_id;
   nft.prev_owner = old_owner_id;
 
