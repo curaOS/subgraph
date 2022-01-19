@@ -387,6 +387,15 @@ export class Nft extends Entity {
   set contract(value: string) {
     this.set("contract", Value.fromString(value));
   }
+
+  get history(): Array<string> {
+    let value = this.get("history");
+    return value!.toStringArray();
+  }
+
+  set history(value: Array<string>) {
+    this.set("history", Value.fromStringArray(value));
+  }
 }
 
 export class Account extends Entity {
@@ -394,7 +403,6 @@ export class Account extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("address", Value.fromBytes(Bytes.empty()));
     this.set("total_supply", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -422,15 +430,6 @@ export class Account extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get address(): Bytes {
-    let value = this.get("address");
-    return value!.toBytes();
-  }
-
-  set address(value: Bytes) {
-    this.set("address", Value.fromBytes(value));
   }
 
   get total_supply(): BigInt {
@@ -477,31 +476,31 @@ export class Account extends Entity {
   }
 }
 
-export class History extends Entity {
+export class Activity extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
 
     this.set("type", Value.fromString(""));
-    this.set("createdAt", Value.fromBigInt(BigInt.zero()));
-    this.set("transactionHash", Value.fromBytes(Bytes.empty()));
+    this.set("timestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("transactionHash", Value.fromString(""));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save History entity without an ID");
+    assert(id != null, "Cannot save Activity entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save History entity with non-string ID. " +
+        "Cannot save Activity entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("History", id.toString(), this);
+      store.set("Activity", id.toString(), this);
     }
   }
 
-  static load(id: string): History | null {
-    return changetype<History | null>(store.get("History", id));
+  static load(id: string): Activity | null {
+    return changetype<Activity | null>(store.get("Activity", id));
   }
 
   get id(): string {
@@ -539,13 +538,13 @@ export class History extends Entity {
     this.set("type", Value.fromString(value));
   }
 
-  get createdAt(): BigInt {
-    let value = this.get("createdAt");
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
     return value!.toBigInt();
   }
 
-  set createdAt(value: BigInt) {
-    this.set("createdAt", Value.fromBigInt(value));
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
   }
 
   get mintBy(): string | null {
@@ -616,12 +615,12 @@ export class History extends Entity {
     }
   }
 
-  get transactionHash(): Bytes {
+  get transactionHash(): string {
     let value = this.get("transactionHash");
-    return value!.toBytes();
+    return value!.toString();
   }
 
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
+  set transactionHash(value: string) {
+    this.set("transactionHash", Value.fromString(value));
   }
 }
