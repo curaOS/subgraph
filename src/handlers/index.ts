@@ -43,7 +43,7 @@ export function handleEvent(event: JSONValue, info: Map<string, string>): void {
   }
 
   if (eventName == "transfer") {
-    transfer();
+    transfer(eventData, info);
     return;
   }
 
