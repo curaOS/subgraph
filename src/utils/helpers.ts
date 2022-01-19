@@ -9,10 +9,12 @@ export function getReceiptInfo(
   const contractAdress = receipt.receipt.receiverId;
   const timestamp = receipt.block.header.timestampNanosec.toString();
   const receiptId = receipt.receipt.id.toBase58();
+  const signerId = receipt.receipt.signerId.toString();
 
   map.set("contract", contractAdress);
   map.set("timestamp", timestamp);
   map.set("receiptId", receiptId);
+  map.set("signerId", signerId);
 
   return map;
 }

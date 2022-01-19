@@ -13,6 +13,8 @@ export default function init(
   save_contract(metadata, info.get("contract"));
 }
 
+// TODO: add assert checks to prevent runtime fails
+
 function save_contract(metadata: JSONValue, contractAdress: string): void {
   // create a new NftContract entity with the contractAdress as id
   const contract = new NftContract(`${contractAdress}`);

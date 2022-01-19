@@ -38,7 +38,7 @@ export function handleEvent(event: JSONValue, info: Map<string, string>): void {
   }
 
   if (eventName == "burn") {
-    burn();
+    burn(eventData, info);
     return;
   }
 
