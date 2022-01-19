@@ -1,18 +1,13 @@
-import {
-  JSONValue,
-  log,
-  TypedMap,
-  TypedMapEntry,
-} from "@graphprotocol/graph-ts";
-import { Nft, NftContract } from "../../generated/schema";
+import { BigInt, JSONValue, log, TypedMapEntry } from "@graphprotocol/graph-ts";
+import { Account, Activity, Nft, NftContract } from "../../generated/schema";
 import { assert_json } from "../utils/assert";
-import { stringifyJson } from "../utils/debug";
 
 export default function mint(
   event_data: JSONValue,
-  contractAdress: string
+  info: Map<string, string>
 ): void {
   // get contract entity from The Graph store
+  const contractAdress = info.get("contract");
   const contract = NftContract.load(contractAdress);
 
   // if the contract is not indexed
@@ -27,13 +22,20 @@ export default function mint(
     .get("tokens")!
     .toArray();
 
-  // save each nfts to The Graph store
+  // for each nfts
   for (let i = 0; i < nfts.length; i++) {
-    save_nft(nfts[i], contractAdress);
+    // save nft
+    const nft = save_nft(nfts[i], contractAdress);
+    // save activity
+    if (nft != null) {
+      save_activity(nft, info);
+      updateAccount(nft.owner);
+      updateContract(contract);
+    }
   }
 }
 
-function save_nft(token: JSONValue, contractAdress: string): void {
+function save_nft(token: JSONValue, contractAdress: string): Nft | null {
   let id: string,
     metadata: TypedMapEntry<string, JSONValue>[],
     owner: string,
@@ -46,22 +48,22 @@ function save_nft(token: JSONValue, contractAdress: string): void {
   for (let i = 0; i < entries.length; i++) {
     if (entries[i].key == "id") {
       // Id is required or indexing fail
-      if (!assert_json(entries[i].value, "string")) return;
+      if (!assert_json(entries[i].value, "string")) return null;
       id = entries[i].value.toString();
     }
     if (entries[i].key == "metadata") {
       // metadata is required
-      if (!assert_json(entries[i].value, "object")) return;
+      if (!assert_json(entries[i].value, "object")) return null;
       metadata = entries[i].value.toObject().entries;
     }
     if (entries[i].key == "owner_id") {
       // owner is required
-      if (!assert_json(entries[i].value, "string")) return;
+      if (!assert_json(entries[i].value, "string")) return null;
       owner = entries[i].value.toString();
     }
     if (entries[i].key == "creator_id") {
       // creator is required
-      if (!assert_json(entries[i].value, "string")) return;
+      if (!assert_json(entries[i].value, "string")) return null;
       creator = entries[i].value.toString();
     }
     if (entries[i].key == "prev_owner_id") {
@@ -91,7 +93,7 @@ function save_nft(token: JSONValue, contractAdress: string): void {
     }
     if (metadata[i].key == "media") {
       // media is required or indexing fail
-      if (!assert_json(metadata[i].value, "string")) return;
+      if (!assert_json(metadata[i].value, "string")) return null;
       nft.media = metadata[i].value.toString();
     }
     if (metadata[i].key == "copies") {
@@ -123,4 +125,44 @@ function save_nft(token: JSONValue, contractAdress: string): void {
   nft.contract = contractAdress;
 
   nft.save();
+
+  return nft;
+}
+
+function save_activity(nft: Nft, info: Map<string, string>): Activity {
+  const id = `${nft.id}/${info.get("timestamp")}`;
+
+  const activity = new Activity(id);
+
+  activity.nft = nft.id;
+  activity.type = "mint";
+  activity.timestamp = BigInt.fromString(info.get("timestamp"));
+
+  activity.mintBy = nft.owner;
+
+  // To do: find a way to get transaction hash instead of the receipt id
+  activity.transactionHash = info.get("receiptId");
+
+  activity.save();
+
+  return activity;
+}
+
+function updateAccount(address: string): void {
+  let account = Account.load(address);
+
+  // if account doesn't exist save new account
+  if (!account) {
+    account = new Account(address);
+    account.total_supply = BigInt.fromI32(0);
+  }
+
+  account.total_supply = account.total_supply.plus(BigInt.fromI32(1));
+
+  account.save();
+}
+
+function updateContract(contract: NftContract): void {
+  contract.total_supply = contract.total_supply.plus(BigInt.fromI32(1));
+  contract.save();
 }

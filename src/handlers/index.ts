@@ -6,7 +6,7 @@ import burn from "./burn";
 import { JSONValue, log } from "@graphprotocol/graph-ts";
 import { assert_json } from "../utils/assert";
 
-export function handleEvent(event: JSONValue, contractAdress: string): void {
+export function handleEvent(event: JSONValue, info: Map<string, string>): void {
   if (!assert_json(event, "object", "logs.event")) return;
 
   // Get the event name
@@ -24,16 +24,16 @@ export function handleEvent(event: JSONValue, contractAdress: string): void {
 
   log.info("Event triggered: {}, Contract Adress: {}", [
     eventName,
-    contractAdress,
+    info.get("contract"),
   ]);
 
   if (eventName == "nft_init") {
-    init(eventData, contractAdress);
+    init(eventData, info);
     return;
   }
 
   if (eventName == "nft_mint") {
-    mint(eventData, contractAdress);
+    mint(eventData, info);
     return;
   }
 
@@ -50,6 +50,6 @@ export function handleEvent(event: JSONValue, contractAdress: string): void {
   // If event name is unknown
   log.warning("Unhandled event: {}, Contract Adress: {}", [
     eventName,
-    contractAdress,
+    info.get("contract"),
   ]);
 }

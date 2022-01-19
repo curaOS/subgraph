@@ -4,13 +4,13 @@ import { assert_json } from "../utils/assert";
 
 export default function init(
   event_data: JSONValue,
-  contractAdress: string
+  info: Map<string, string>
 ): void {
   const metadata = event_data.toObject().get("metadata")!;
 
   if (!assert_json(metadata, "object", "init.data.metadata")) return;
 
-  save_contract(metadata, contractAdress);
+  save_contract(metadata, info.get("contract"));
 }
 
 function save_contract(metadata: JSONValue, contractAdress: string): void {
