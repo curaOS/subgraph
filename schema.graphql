@@ -38,6 +38,7 @@ type Nft @entity {
 
   # Relationships
   contract: NftContract!
+  history: [Activity!]! @derivedFrom(field: "nft")
 
   # Todo:
   # - Add market (royalty, isOnSale, lastPrice, askedPrice...)
@@ -45,7 +46,6 @@ type Nft @entity {
 
 type Account @entity {
   id: ID!
-  address: Bytes!
 
   # Stats
   total_supply: BigInt!
@@ -55,11 +55,11 @@ type Account @entity {
   createdNfts: [Nft!] @derivedFrom(field: "creator")
 }
 
-type History @entity {
+type Activity @entity {
   id: ID!
   nft: Nft
   type: ActivityType!
-  createdAt: BigInt!
+  timestamp: BigInt!
 
   # mint activity
   mintBy: Account
@@ -71,7 +71,7 @@ type History @entity {
   transferFrom: Account
   transferTo: Account
 
-  transactionHash: Bytes!
+  transactionHash: String!
 }
 
 enum ActivityType @entity {
