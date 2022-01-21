@@ -2,6 +2,7 @@ import init from "./contract/init";
 import mint from "./nft/mint";
 import transfer from "./nft/transfer";
 import burn from "./nft/burn";
+import bid from "./market/bid";
 
 import { JSONValue, log } from "@graphprotocol/graph-ts";
 import { assert_json } from "../utils/assert";
@@ -37,13 +38,18 @@ export function handleEvent(event: JSONValue, info: Map<string, string>): void {
     return;
   }
 
-  if (eventName == "burn") {
+  if (eventName == "nft_burn") {
     burn(eventData, info);
     return;
   }
 
-  if (eventName == "transfer") {
+  if (eventName == "nft_transfer") {
     transfer(eventData, info);
+    return;
+  }
+
+  if (eventName == "nft_bid") {
+    bid(eventData, info);
     return;
   }
 
