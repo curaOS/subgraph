@@ -40,7 +40,7 @@ export function assert_json(
     return true;
   }
 
-  log.warning(`Not a json {}: {}${msg != "" && ", message: {}"}`, [
+  log.warning(`Not a json {}: {}${msg != "" ? ", message: {}" : ""}`, [
     type,
     input.kind.toString(),
     msg,
