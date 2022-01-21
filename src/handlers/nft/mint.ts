@@ -45,7 +45,7 @@ export default function mint(
 function save_nft(token: JSONValue, contractAddress: string): Nft | null {
   // nft id is required or indexing will be skiped
   const tokenId = token.toObject().get("id")!;
-  if (!assert_json(tokenId, "string")) return null;
+  if (!assert_json(tokenId, "string", "mint.save_nft.id")) return null;
 
   // new Nft entity
   const nft = new Nft(`${tokenId.toString()}`);
@@ -61,20 +61,26 @@ function save_nft(token: JSONValue, contractAddress: string): Nft | null {
     switch (true) {
       case key == "owner_id":
         // owner is required
-        if (!assert_json(value, "string")) return null;
+        if (!assert_json(value, "string", "mint.save_nft.owner")) return null;
         nft.owner = value.toString();
       case key == "creator":
         // creator is required
-        if (!assert_json(value, "string")) return null;
+        if (!assert_json(value, "string", "mint.save_nft.creator")) return null;
         nft.creator = value.toString();
       case key == "prev_owner":
         // prev_owner is optional
-        nft.prev_owner = assert_json(value, "string")
+        nft.prev_owner = assert_json(
+          value,
+          "string",
+          "mint.save_nft.prev_owner"
+        )
           ? value.toString()
           : nft.owner;
       case key == "royalty":
         // royalty is optional
-        var royalty = assert_json(value, "object") ? value.toObject() : null;
+        var royalty = assert_json(value, "object", "mint.save_nft.royalty")
+          ? value.toObject()
+          : null;
     }
   }
 
@@ -89,7 +95,8 @@ function save_nft(token: JSONValue, contractAddress: string): Nft | null {
 function save_metadata(token: JSONValue): NftMetadata | null {
   // map token object into variables
   const metadataObj = token.toObject().get("metadata")!;
-  if (!assert_json(metadataObj, "object")) return null;
+  if (!assert_json(metadataObj, "object", "mint.save_metadata.metadata"))
+    return null;
 
   const entries = metadataObj.toObject().entries;
 
@@ -158,6 +165,7 @@ function save_metadata(token: JSONValue): NftMetadata | null {
     }
   }
 
+  nftMetadata.save();
   return nftMetadata;
 }
 
