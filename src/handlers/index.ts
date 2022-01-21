@@ -1,7 +1,7 @@
-import init from "./init";
-import mint from "./mint";
-import transfer from "./transfer";
-import burn from "./burn";
+import init from "./contract/init";
+import mint from "./nft/mint";
+import transfer from "./nft/transfer";
+import burn from "./nft/burn";
 
 import { JSONValue, log } from "@graphprotocol/graph-ts";
 import { assert_json } from "../utils/assert";
