@@ -16,5 +16,8 @@ export function getReceiptInfo(
   map.set("receiptId", receiptId);
   map.set("signerId", signerId);
 
+  // To do: find a way to get transaction hash instead of the receipt id
+  map.set("transactionHash", receiptId);
+
   return map;
 }
