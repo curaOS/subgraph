@@ -23,26 +23,19 @@ type NftContract @entity {
 type Nft @entity {
   id: ID!
 
-  # Metadata
-  title: String
-  description: String
-  media: String!
-  copies: BigInt
-  extra: String
-  reference: String
-
-  # Ownership
-  owner: Account!
-  creator: Account!
-  prev_owner: Account
-
   # Relationships
   contract: NftContract!
+  metadata: NftMetadata! @derivedFrom(field: "nft")
   history: [Activity!]! @derivedFrom(field: "nft")
+
+  # Ownership
+  owner: User!
+  creator: User!
+  prev_owner: User
 
   # Market
   ## royalties
-  royalties: [Account!]
+  royalties: [User!]
   royalties_percentage: Int
 
   ## ask
@@ -57,16 +50,29 @@ type Nft @entity {
   bids: [Bid!] @derivedFrom(field: "nft")
 }
 
-type Account @entity {
+type NftMetadata @entity {
   id: ID!
+  nft: Nft!
 
-  # Stats
-  total_supply: BigInt!
+  title: String!
+  description: String
+  media: String!
+  copies: BigInt
+  extra: String
+  reference: String
+}
+
+type User @entity {
+  id: ID!
 
   # Relationships
   ownedNfts: [Nft!] @derivedFrom(field: "owner")
   createdNfts: [Nft!] @derivedFrom(field: "creator")
   bids: [Bids!] @derivedFrom(field: "bidder")
+
+  # Stats
+  total_owned: BigInt!
+  total_created: BigInt!
 }
 
 type Activity @entity {
@@ -76,14 +82,14 @@ type Activity @entity {
   timestamp: BigInt!
 
   # mint activity
-  mintBy: Account
+  mintBy: User
 
   # burn activity
-  burnBy: Account
+  burnBy: User
 
   # transfer activity
-  transferFrom: Account
-  transferTo: Account
+  transferFrom: User
+  transferTo: User
 
   transactionHash: String!
 }
@@ -97,7 +103,7 @@ enum ActivityType @entity {
 type Bid @entity {
   id: ID!
   nft: Nft!
-  bidder: Account!
+  bidder: User!
 
   amount: Int!
   sell_on_share: String
