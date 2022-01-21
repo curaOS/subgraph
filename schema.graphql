@@ -40,8 +40,21 @@ type Nft @entity {
   contract: NftContract!
   history: [Activity!]! @derivedFrom(field: "nft")
 
-  # Todo:
-  # - Add market (royalty, isOnSale, lastPrice, askedPrice...)
+  # Market
+  ## royalties
+  royalties: [Account!]
+  royalties_percentage: Int
+
+  ## ask
+  askedPrice: Int
+
+  ## shares
+  owner_share: Int
+  creator_share: Int
+  prev_owner_share: Int
+
+  ## bids
+  bids: [Bid!] @derivedFrom(field: "nft")
 }
 
 type Account @entity {
@@ -53,11 +66,12 @@ type Account @entity {
   # Relationships
   ownedNfts: [Nft!] @derivedFrom(field: "owner")
   createdNfts: [Nft!] @derivedFrom(field: "creator")
+  bids: [Bids!] @derivedFrom(field: "bidder")
 }
 
 type Activity @entity {
   id: ID!
-  nft: Nft
+  nft: Nft!
   type: ActivityType!
   timestamp: BigInt!
 
@@ -78,4 +92,16 @@ enum ActivityType @entity {
   mint
   burn
   transfer
+}
+
+type Bid @entity {
+  id: ID!
+  nft: Nft!
+  bidder: Account!
+
+  amount: Int!
+  sell_on_share: String
+  currency: String
+
+  accepted: boolean
 }
