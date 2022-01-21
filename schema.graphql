@@ -112,6 +112,7 @@ type Bid @entity {
   id: ID!
   nft: Nft!
   bidder: User!
+  timestamp: BigInt!
 
   amount: Int!
   sell_on_share: String
