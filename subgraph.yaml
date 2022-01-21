@@ -17,7 +17,9 @@ dataSources:
       entities:
         - NftContract
         - Nft
-        - Account
-        - History
+        - NftMetadata
+        - User
+        - Activity
+        - Bid
       receiptHandlers:
         - handler: handleReceipt
