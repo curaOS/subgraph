@@ -14,6 +14,8 @@ type NftContract @entity {
   parameters: String
 
   # Stats
+  timestamp: BigInt!
+  updated_at: BigInt!
   total_supply: BigInt!
 
   # Relationships
@@ -57,9 +59,15 @@ type NftMetadata @entity {
   title: String!
   description: String
   media: String!
-  copies: BigInt
+  media_hash: String
+  copies: Int
   extra: String
   reference: String
+  reference_hash: String
+  issued_at: String
+  starts_at: String
+  updated_at: String
+  expires_at: String
 }
 
 type User @entity {
@@ -68,11 +76,11 @@ type User @entity {
   # Relationships
   ownedNfts: [Nft!] @derivedFrom(field: "owner")
   createdNfts: [Nft!] @derivedFrom(field: "creator")
-  bids: [Bids!] @derivedFrom(field: "bidder")
+  bids: [Bid!] @derivedFrom(field: "bidder")
 
   # Stats
   total_owned: BigInt!
-  total_created: BigInt!
+  total_minted: BigInt!
 }
 
 type Activity @entity {
@@ -109,5 +117,5 @@ type Bid @entity {
   sell_on_share: String
   currency: String
 
-  accepted: boolean
+  accepted: Boolean
 }
