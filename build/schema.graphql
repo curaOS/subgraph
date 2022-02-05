@@ -111,12 +111,13 @@ enum ActivityType @entity {
 type Bid @entity {
   id: ID!
   nft: Nft!
-  bidder: User!
   timestamp: BigInt!
 
-  amount: Int!
-  sell_on_share: String
-  currency: String
+  amount: BigInt!
+  bidder: User!
+  recipient: User!
+  sell_on_share: Int!
+  currency: String!
 
-  accepted: Boolean
+  accepted: Boolean!
 }

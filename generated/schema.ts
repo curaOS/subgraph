@@ -890,8 +890,11 @@ export class Bid extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("nft", Value.fromString(""));
-    this.set("bidder", Value.fromString(""));
     this.set("timestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("amount", Value.fromBigInt(BigInt.zero()));
+    this.set("bidder", Value.fromString(""));
+    this.set("recipient", Value.fromString(""));
+    this.set("currency", Value.fromString(""));
   }
 
   save(): void {
@@ -929,15 +932,6 @@ export class Bid extends Entity {
     this.set("nft", Value.fromString(value));
   }
 
-  get bidder(): string {
-    let value = this.get("bidder");
-    return value!.toString();
-  }
-
-  set bidder(value: string) {
-    this.set("bidder", Value.fromString(value));
-  }
-
   get timestamp(): BigInt {
     let value = this.get("timestamp");
     return value!.toBigInt();
@@ -947,47 +941,49 @@ export class Bid extends Entity {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get amount(): i32 {
+  get amount(): BigInt {
     let value = this.get("amount");
+    return value!.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get bidder(): string {
+    let value = this.get("bidder");
+    return value!.toString();
+  }
+
+  set bidder(value: string) {
+    this.set("bidder", Value.fromString(value));
+  }
+
+  get recipient(): string {
+    let value = this.get("recipient");
+    return value!.toString();
+  }
+
+  set recipient(value: string) {
+    this.set("recipient", Value.fromString(value));
+  }
+
+  get sell_on_share(): i32 {
+    let value = this.get("sell_on_share");
     return value!.toI32();
   }
 
-  set amount(value: i32) {
-    this.set("amount", Value.fromI32(value));
+  set sell_on_share(value: i32) {
+    this.set("sell_on_share", Value.fromI32(value));
   }
 
-  get sell_on_share(): string | null {
-    let value = this.get("sell_on_share");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set sell_on_share(value: string | null) {
-    if (!value) {
-      this.unset("sell_on_share");
-    } else {
-      this.set("sell_on_share", Value.fromString(<string>value));
-    }
-  }
-
-  get currency(): string | null {
+  get currency(): string {
     let value = this.get("currency");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+    return value!.toString();
   }
 
-  set currency(value: string | null) {
-    if (!value) {
-      this.unset("currency");
-    } else {
-      this.set("currency", Value.fromString(<string>value));
-    }
+  set currency(value: string) {
+    this.set("currency", Value.fromString(value));
   }
 
   get accepted(): boolean {
