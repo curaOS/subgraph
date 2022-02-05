@@ -11,7 +11,7 @@ dataSources:
       account: vgr1.atestraf.testnet
       startBlock: 78920663
     mapping:
-      file: receipts\receipts.wasm
+      file: receipts/receipts.wasm
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
