@@ -29,24 +29,34 @@ function save_contract(metadata: JSONValue, info: Map<string, string>): void {
     switch (true) {
       case key == "spec":
         contract.spec = value.toString();
+        break;
       case key == "name":
         contract.name = value.toString();
+        break;
       case key == "symbol":
         contract.symbol = value.toString();
+        break;
       case key == "icon":
         contract.icon = value.toString();
+        break;
       case key == "base_uri":
         contract.base_uri = value.toString();
+        break;
       case key == "reference":
         contract.reference = value.toString();
+        break;
       case key == "packages_script":
         contract.packages_script = value.toString();
+        break;
       case key == "render_script":
         contract.render_script = value.toString();
+        break;
       case key == "style_css":
         contract.style_css = value.toString();
+        break;
       case key == "parameters":
         contract.parameters = value.toString();
+        break;
     }
   }
 
