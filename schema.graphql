@@ -59,6 +59,7 @@ type NftMetadata @entity {
   title: String!
   description: String
   media: String!
+  media_animation: String
   media_hash: String
   copies: Int
   extra: String

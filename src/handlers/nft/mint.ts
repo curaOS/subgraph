@@ -137,7 +137,7 @@ function save_metadata(token: JSONValue, metadata: JSONValue): NftMetadata | nul
         break;
 
       case key == "media_animation":
-        nftMetadata.media = assert_json(value, "string", "save_metadata.media_animation")
+        nftMetadata.media_animation = assert_json(value, "string", "save_metadata.media_animation")
           ? value.toString()
           : "";
         break;
