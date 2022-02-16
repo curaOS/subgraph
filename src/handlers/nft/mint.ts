@@ -70,17 +70,17 @@ function save_nft(token: JSONValue, contractAddress: string): Nft | null {
         if (!assert_json(value, "string", "mint.save_nft.owner")) return null;
         nft.owner = value.toString();
         break;
-      case key == "creator":
+      case key == "creator_id":
         // creator is required
-        if (!assert_json(value, "string", "mint.save_nft.creator")) return null;
+        if (!assert_json(value, "string", "mint.save_nft.creator_id")) return null;
         nft.creator = value.toString();
         break;
-      case key == "prev_owner":
+      case key == "prev_owner_id":
         // prev_owner is optional
         nft.prev_owner = assert_json(
           value,
           "string",
-          "mint.save_nft.prev_owner"
+          "mint.save_nft.prev_owner_id"
         )
           ? value.toString()
           : nft.owner;
