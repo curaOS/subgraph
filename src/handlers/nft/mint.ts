@@ -69,10 +69,12 @@ function save_nft(token: JSONValue, contractAddress: string): Nft | null {
         // owner is required
         if (!assert_json(value, "string", "mint.save_nft.owner")) return null;
         nft.owner = value.toString();
+        break;
       case key == "creator":
         // creator is required
         if (!assert_json(value, "string", "mint.save_nft.creator")) return null;
         nft.creator = value.toString();
+        break;
       case key == "prev_owner":
         // prev_owner is optional
         nft.prev_owner = assert_json(
@@ -82,11 +84,13 @@ function save_nft(token: JSONValue, contractAddress: string): Nft | null {
         )
           ? value.toString()
           : nft.owner;
+        break;
       case key == "royalty":
         // royalty is optional
         var royalty = assert_json(value, "object", "mint.save_nft.royalty")
           ? value.toObject()
           : null;
+        break;
     }
   }
 
@@ -115,53 +119,84 @@ function save_metadata(token: JSONValue, metadata: JSONValue): NftMetadata | nul
     const value = entries[i].value;
     switch (true) {
       case key == "title":
-        nftMetadata.title = assert_json(value, "string")
+        nftMetadata.title = assert_json(value, "string", "save_metadata.title")
           ? value.toString()
           : "";
+        break;
+
       case key == "description":
-        nftMetadata.description = assert_json(value, "string")
+        nftMetadata.description = assert_json(value, "string", "save_metadata.description")
           ? value.toString()
           : "";
+        break;
+
       case key == "media":
-        nftMetadata.media = assert_json(value, "string")
+        nftMetadata.media = assert_json(value, "string", "save_metadata.media")
           ? value.toString()
           : "";
+        break;
+
+      case key == "media_animation":
+        nftMetadata.media = assert_json(value, "string", "save_metadata.media_animation")
+          ? value.toString()
+          : "";
+        break;
+
       case key == "media_hash":
-        nftMetadata.media_hash = assert_json(value, "string")
+        nftMetadata.media_hash = assert_json(value, "string", "save_metadata.media_hash")
           ? value.toString()
           : "";
+        break;
+
       case key == "copies":
-        nftMetadata.copies = assert_json(value, "number")
+        nftMetadata.copies = assert_json(value, "number", "save_metadata.copies")
           ? (value.toU64() as i32)
           : 1;
+        break;
+
       case key == "extra":
-        nftMetadata.extra = assert_json(value, "string")
+        log.warning(key + " --- " + stringifyJson(value) + " --- " + value.kind.toString(), [])
+        nftMetadata.extra = assert_json(value, "string", "save_metadata.extra")
           ? value.toString()
           : "";
+        break;
+
       case key == "reference":
-        nftMetadata.reference = assert_json(value, "string")
+        nftMetadata.reference = assert_json(value, "string", "save_metadata.reference")
           ? value.toString()
           : "";
+        break;
+
       case key == "reference_hash":
-        nftMetadata.reference_hash = assert_json(value, "string")
+        nftMetadata.reference_hash = assert_json(value, "string", "save_metadata.reference_hash")
           ? value.toString()
           : "";
+        break;
+
       case key == "issued_at":
-        nftMetadata.issued_at = assert_json(value, "string")
+        nftMetadata.issued_at = assert_json(value, "string", "save_metadata.issued_at")
           ? value.toString()
           : "";
+        break;
+
       case key == "starts_at":
-        nftMetadata.starts_at = assert_json(value, "string")
+        nftMetadata.starts_at = assert_json(value, "string", "save_metadata.starts_at")
           ? value.toString()
           : "";
+        break;
+
       case key == "updated_at":
-        nftMetadata.updated_at = assert_json(value, "string")
+        nftMetadata.updated_at = assert_json(value, "string", "save_metadata.updated_at")
           ? value.toString()
           : "";
+        break;
+
       case key == "expires_at":
-        nftMetadata.expires_at = assert_json(value, "string")
+        nftMetadata.expires_at = assert_json(value, "string", "save_metadata.expires_at")
           ? value.toString()
           : "";
+        break;
+
     }
   }
 
