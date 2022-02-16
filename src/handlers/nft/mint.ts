@@ -7,6 +7,7 @@ import {
   NftMetadata,
 } from "../../../generated/schema";
 import { assert_json } from "../../utils/assert";
+import { stringifyJson } from "../../utils/debug";
 
 export default function mint(
   event_data: JSONValue,
@@ -28,13 +29,18 @@ export default function mint(
     .get("tokens")!
     .toArray();
 
+  const metadata = event_data
+    .toObject()
+    .get("metadata")!
+    .toArray();
+
   // for each nfts
   for (let i = 0; i < nfts.length; i++) {
     // save nft
     const nft = save_nft(nfts[i], contractAddress);
     // save activity
     if (nft != null) {
-      save_metadata(nfts[i]);
+      save_metadata(nfts[i], metadata[i]);
       save_activity(nft, info);
       update_user(nft.owner);
       update_contract(contract);
@@ -92,23 +98,17 @@ function save_nft(token: JSONValue, contractAddress: string): Nft | null {
   return nft;
 }
 
-function save_metadata(token: JSONValue): NftMetadata | null {
-  // map token object into variables
-  const metadataObj = token.toObject().get("metadata")!;
-  if (!assert_json(metadataObj, "object", "mint.save_metadata.metadata"))
-    return null;
-
-  const entries = metadataObj.toObject().entries;
+function save_metadata(token: JSONValue, metadata: JSONValue): NftMetadata | null {
+  const entries = metadata.toObject().entries;
 
   // nft id
   const tokenId = token
     .toObject()
     .get("id")!
-    .toString();
 
   // new NftMetadata entity with tokenId as id
-  const nftMetadata = new NftMetadata(`${tokenId}`);
-  nftMetadata.nft = tokenId;
+  const nftMetadata = new NftMetadata(`${tokenId.toString()}`);
+  nftMetadata.nft = tokenId.toString();
 
   for (let i = 0; i < entries.length; i++) {
     const key = entries[i].key;
