@@ -16,13 +16,13 @@ export default function bid(
   if (!assert_json(bidder, "string", "bid.bidder_id")) return;
 
   const amount = data.get("amount")!;
-  if (!assert_json(bidder, "number", "bid.amount")) return;
+  if (!assert_json(bidder, "string", "bid.amount")) return;
 
   const recipient = data.get("recipient")!;
   if (!assert_json(recipient, "string", "bid.recipient")) return;
 
   const sell_on_share = data.get("sell_on_share")!;
-  if (!assert_json(sell_on_share, "number", "bid.sell_on_share")) return;
+  if (!assert_json(sell_on_share, "string", "bid.sell_on_share")) return;
 
   const currency = data.get("currency")!;
   if (!assert_json(currency, "string", "bid.currency")) return;
