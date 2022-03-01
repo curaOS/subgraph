@@ -767,7 +767,6 @@ export class Activity extends Entity {
     this.set("nft", Value.fromString(""));
     this.set("type", Value.fromString(""));
     this.set("timestamp", Value.fromBigInt(BigInt.zero()));
-    this.set("bid", Value.fromString(""));
     this.set("transactionHash", Value.fromString(""));
   }
 
@@ -858,13 +857,21 @@ export class Activity extends Entity {
     }
   }
 
-  get bid(): string {
+  get bid(): string | null {
     let value = this.get("bid");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set bid(value: string) {
-    this.set("bid", Value.fromString(value));
+  set bid(value: string | null) {
+    if (!value) {
+      this.unset("bid");
+    } else {
+      this.set("bid", Value.fromString(<string>value));
+    }
   }
 
   get transferFrom(): string | null {
@@ -1031,7 +1038,6 @@ export class BidActivity extends Entity {
     this.set("nft", Value.fromString(""));
     this.set("amount", Value.fromBigInt(BigInt.zero()));
     this.set("type", Value.fromString(""));
-    this.set("performedBy", Value.fromString(""));
   }
 
   save(): void {
@@ -1087,12 +1093,20 @@ export class BidActivity extends Entity {
     this.set("type", Value.fromString(value));
   }
 
-  get performedBy(): string {
+  get performedBy(): string | null {
     let value = this.get("performedBy");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set performedBy(value: string) {
-    this.set("performedBy", Value.fromString(value));
+  set performedBy(value: string | null) {
+    if (!value) {
+      this.unset("performedBy");
+    } else {
+      this.set("performedBy", Value.fromString(<string>value));
+    }
   }
 }

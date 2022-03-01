@@ -96,8 +96,8 @@ type Activity @entity {
   # burn activity
   burnBy: User
 
-  # mint activity
-  bidBy: User
+  # bid activity
+  bid: BidActivity
 
   # transfer activity
   transferFrom: User
@@ -125,4 +125,21 @@ type Bid @entity {
   currency: String!
 
   accepted: Boolean!
+}
+
+
+type BidActivity @entity {
+    id: ID!
+    nft: Nft!
+    amount: BigInt!
+    type: BidActivityType!
+
+    performedBy: User
+}
+
+enum BidActivityType @entity {
+  set
+  remove
+  accept
+  update
 }
