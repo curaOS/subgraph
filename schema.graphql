@@ -97,7 +97,7 @@ type Activity @entity {
   burnBy: User
 
   # bid activity
-  bid: BidActivity!
+  bid: BidActivity
 
   # transfer activity
   transferFrom: User
@@ -134,7 +134,7 @@ type BidActivity @entity {
     amount: BigInt!
     type: BidActivityType!
 
-    performedBy: User!
+    performedBy: User
 }
 
 enum BidActivityType @entity {

@@ -1,4 +1,4 @@
-import {BigInt, JSONValue, store} from "@graphprotocol/graph-ts";
+import {BigInt, JSONValue, log, store} from "@graphprotocol/graph-ts";
 import {Activity, Bid, BidActivity, Nft, User} from "../../../generated/schema";
 import { assert_json } from "../../utils/assert";
 
@@ -36,7 +36,6 @@ export default function bid(
       recipient.toString(),
       sell_on_share.toString(),
       currency.toString(),
-        bid ? true : false,
       info
     );
     save_activity(
@@ -56,16 +55,9 @@ function save_bid(
   recipient: string,
   sell_on_share: string,
   currency: string,
-  updatedBid: boolean,
   info: Map<string, string>
 ): void {
-  let bid = null;
-
-  if(updatedBid){
-    bid = Bid.load(`${tokenId}-${bidder}`)
-  } else {
-    bid = new Bid(`${tokenId}-${bidder}`)
-  }
+  const bid = new Bid(`${tokenId}-${bidder}`);
 
   bid.nft = tokenId
   bid.timestamp = BigInt.fromString(info.get("timestamp"));
@@ -84,14 +76,14 @@ function save_bid(
 
 
 function save_activity(
-    bidder: string,
     tokenId: string,
+    bidder: string,
     amount: string,
     updatedBid: boolean,
     info: Map<string, string>
 ): Activity {
   const id = `${tokenId}-${bidder}/${info.get("timestamp")}`;
-
+  log.error(bidder, [])
   const activity = new Activity(id);
   const bidActivity = new BidActivity(id);
 
