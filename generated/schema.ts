@@ -823,8 +823,8 @@ export class Activity extends Entity {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get mintBy(): string | null {
-    let value = this.get("mintBy");
+  get actor(): string | null {
+    let value = this.get("actor");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -832,16 +832,16 @@ export class Activity extends Entity {
     }
   }
 
-  set mintBy(value: string | null) {
+  set actor(value: string | null) {
     if (!value) {
-      this.unset("mintBy");
+      this.unset("actor");
     } else {
-      this.set("mintBy", Value.fromString(<string>value));
+      this.set("actor", Value.fromString(<string>value));
     }
   }
 
-  get burnBy(): string | null {
-    let value = this.get("burnBy");
+  get recipient(): string | null {
+    let value = this.get("recipient");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -849,62 +849,28 @@ export class Activity extends Entity {
     }
   }
 
-  set burnBy(value: string | null) {
+  set recipient(value: string | null) {
     if (!value) {
-      this.unset("burnBy");
+      this.unset("recipient");
     } else {
-      this.set("burnBy", Value.fromString(<string>value));
+      this.set("recipient", Value.fromString(<string>value));
     }
   }
 
-  get bid(): string | null {
-    let value = this.get("bid");
+  get amount(): BigInt | null {
+    let value = this.get("amount");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBigInt();
     }
   }
 
-  set bid(value: string | null) {
+  set amount(value: BigInt | null) {
     if (!value) {
-      this.unset("bid");
+      this.unset("amount");
     } else {
-      this.set("bid", Value.fromString(<string>value));
-    }
-  }
-
-  get transferFrom(): string | null {
-    let value = this.get("transferFrom");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set transferFrom(value: string | null) {
-    if (!value) {
-      this.unset("transferFrom");
-    } else {
-      this.set("transferFrom", Value.fromString(<string>value));
-    }
-  }
-
-  get transferTo(): string | null {
-    let value = this.get("transferTo");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set transferTo(value: string | null) {
-    if (!value) {
-      this.unset("transferTo");
-    } else {
-      this.set("transferTo", Value.fromString(<string>value));
+      this.set("amount", Value.fromBigInt(<BigInt>value));
     }
   }
 
@@ -1027,86 +993,5 @@ export class Bid extends Entity {
 
   set accepted(value: boolean) {
     this.set("accepted", Value.fromBoolean(value));
-  }
-}
-
-export class BidActivity extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-
-    this.set("nft", Value.fromString(""));
-    this.set("amount", Value.fromBigInt(BigInt.zero()));
-    this.set("type", Value.fromString(""));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save BidActivity entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        "Cannot save BidActivity entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
-      );
-      store.set("BidActivity", id.toString(), this);
-    }
-  }
-
-  static load(id: string): BidActivity | null {
-    return changetype<BidActivity | null>(store.get("BidActivity", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get nft(): string {
-    let value = this.get("nft");
-    return value!.toString();
-  }
-
-  set nft(value: string) {
-    this.set("nft", Value.fromString(value));
-  }
-
-  get amount(): BigInt {
-    let value = this.get("amount");
-    return value!.toBigInt();
-  }
-
-  set amount(value: BigInt) {
-    this.set("amount", Value.fromBigInt(value));
-  }
-
-  get type(): string {
-    let value = this.get("type");
-    return value!.toString();
-  }
-
-  set type(value: string) {
-    this.set("type", Value.fromString(value));
-  }
-
-  get performedBy(): string | null {
-    let value = this.get("performedBy");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set performedBy(value: string | null) {
-    if (!value) {
-      this.unset("performedBy");
-    } else {
-      this.set("performedBy", Value.fromString(<string>value));
-    }
   }
 }
