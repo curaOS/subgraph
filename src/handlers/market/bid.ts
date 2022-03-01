@@ -1,5 +1,5 @@
-import { BigInt, JSONValue } from "@graphprotocol/graph-ts";
-import { Bid } from "../../../generated/schema";
+import {BigInt, JSONValue, store} from "@graphprotocol/graph-ts";
+import {Activity, Bid, BidActivity, Nft, User} from "../../../generated/schema";
 import { assert_json } from "../../utils/assert";
 
 export default function bid(
@@ -28,6 +28,7 @@ export default function bid(
   if (!assert_json(currency, "string", "bid.currency")) return;
 
   for (let i = 0; i < token_ids.length; i++) {
+    let bid = Bid.load(`${token_ids[i].toString()}-${bidder.toString()}`)
     save_bid(
       token_ids[i].toString(),
       bidder.toString(),
@@ -35,8 +36,16 @@ export default function bid(
       recipient.toString(),
       sell_on_share.toString(),
       currency.toString(),
+        bid ? true : false,
       info
     );
+    save_activity(
+        token_ids[i].toString(),
+        bidder.toString(),
+        amount.toString(),
+        bid ? true : false,
+        info
+    )
   }
 }
 
@@ -47,9 +56,16 @@ function save_bid(
   recipient: string,
   sell_on_share: string,
   currency: string,
+  updatedBid: boolean,
   info: Map<string, string>
 ): void {
-  const bid = new Bid(`${tokenId}-${bidder}`);
+  let bid = null;
+
+  if(updatedBid){
+    bid = Bid.load(`${tokenId}-${bidder}`)
+  } else {
+    bid = new Bid(`${tokenId}-${bidder}`)
+  }
 
   bid.nft = tokenId
   bid.timestamp = BigInt.fromString(info.get("timestamp"));
@@ -64,4 +80,41 @@ function save_bid(
   bid.accepted = false
 
   bid.save();
+}
+
+
+function save_activity(
+    bidder: string,
+    tokenId: string,
+    amount: string,
+    updatedBid: boolean,
+    info: Map<string, string>
+): Activity {
+  const id = `${tokenId}-${bidder}/${info.get("timestamp")}`;
+
+  const activity = new Activity(id);
+  const bidActivity = new BidActivity(id);
+
+  bidActivity.nft = tokenId;
+  bidActivity.performedBy = bidder;
+  bidActivity.amount = BigInt.fromString(amount);
+
+  if(updatedBid){
+    bidActivity.type = "update";
+  } else {
+    bidActivity.type = "set";
+  }
+
+  activity.nft = tokenId;
+  activity.type = "bid";
+  activity.timestamp = BigInt.fromString(info.get("timestamp"));
+
+  activity.bid = id;
+
+  activity.transactionHash = info.get("transactionHash");
+
+  activity.save();
+  bidActivity.save();
+
+  return activity;
 }

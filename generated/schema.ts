@@ -767,6 +767,7 @@ export class Activity extends Entity {
     this.set("nft", Value.fromString(""));
     this.set("type", Value.fromString(""));
     this.set("timestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("bid", Value.fromString(""));
     this.set("transactionHash", Value.fromString(""));
   }
 
@@ -855,6 +856,15 @@ export class Activity extends Entity {
     } else {
       this.set("burnBy", Value.fromString(<string>value));
     }
+  }
+
+  get bid(): string {
+    let value = this.get("bid");
+    return value!.toString();
+  }
+
+  set bid(value: string) {
+    this.set("bid", Value.fromString(value));
   }
 
   get transferFrom(): string | null {
@@ -1010,5 +1020,79 @@ export class Bid extends Entity {
 
   set accepted(value: boolean) {
     this.set("accepted", Value.fromBoolean(value));
+  }
+}
+
+export class BidActivity extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("nft", Value.fromString(""));
+    this.set("amount", Value.fromBigInt(BigInt.zero()));
+    this.set("type", Value.fromString(""));
+    this.set("performedBy", Value.fromString(""));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save BidActivity entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save BidActivity entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("BidActivity", id.toString(), this);
+    }
+  }
+
+  static load(id: string): BidActivity | null {
+    return changetype<BidActivity | null>(store.get("BidActivity", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get nft(): string {
+    let value = this.get("nft");
+    return value!.toString();
+  }
+
+  set nft(value: string) {
+    this.set("nft", Value.fromString(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value!.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get type(): string {
+    let value = this.get("type");
+    return value!.toString();
+  }
+
+  set type(value: string) {
+    this.set("type", Value.fromString(value));
+  }
+
+  get performedBy(): string {
+    let value = this.get("performedBy");
+    return value!.toString();
+  }
+
+  set performedBy(value: string) {
+    this.set("performedBy", Value.fromString(value));
   }
 }
