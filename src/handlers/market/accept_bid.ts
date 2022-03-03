@@ -55,12 +55,17 @@ function save_activity(
     let token = Nft.load(`${tokenId}`);
     let bid = Bid.load(`${tokenId}-${bidder}`);
 
+    if (bid) {
+        activity.amount = bid.amount;
+    }
+    if (token) {
+        activity.actor = token.owner;
+    }
+
     activity.type = "accept_bid";
     activity.nft = tokenId;
 
-    // activity.actor = token.owner;
     activity.recipient = bidder;
-    // activity.amount = bid.amount;
 
     activity.timestamp = BigInt.fromString(info.get("timestamp"));
     activity.transactionHash = info.get("transactionHash");

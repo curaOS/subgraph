@@ -1,4 +1,4 @@
-import {BigInt, JSONValue, log, store} from "@graphprotocol/graph-ts";
+import {BigInt, json, JSONValue, log, store} from "@graphprotocol/graph-ts";
 import {Activity, Bid, Nft, User} from "../../../generated/schema";
 import { assert_json } from "../../utils/assert";
 
@@ -29,6 +29,11 @@ export default function bid(
 
   for (let i = 0; i < token_ids.length; i++) {
     let bid = Bid.load(`${token_ids[i].toString()}-${bidder.toString()}`)
+
+    update_user(
+        bidder.toString(),
+        token_ids[i].toString()
+    )
     save_bid(
       token_ids[i].toString(),
       bidder.toString(),
@@ -45,6 +50,7 @@ export default function bid(
         bid ? true : false,
         info
     )
+
   }
 }
 
@@ -102,4 +108,22 @@ function save_activity(
   activity.save();
 
   return activity;
+}
+
+
+function update_user(
+    address: string,
+    tokenId: string,
+): void {
+  let user = User.load(address);
+
+  // if account doesn't exist save new account
+  if (!user) {
+    user = new User(address);
+    user.total_owned = BigInt.zero();
+    user.total_minted = BigInt.zero();
+  }
+
+
+  user.save();
 }

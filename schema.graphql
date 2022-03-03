@@ -103,6 +103,7 @@ enum ActivityType @entity {
   transfer
   set_bid
   accept_bid
+  update_bid
   remove_bid
 }
 
