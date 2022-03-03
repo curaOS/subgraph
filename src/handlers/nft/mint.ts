@@ -213,7 +213,7 @@ function save_activity(nft: Nft, info: Map<string, string>): Activity {
   activity.type = "mint";
   activity.timestamp = BigInt.fromString(info.get("timestamp"));
 
-  activity.actor = nft.owner;
+  activity.sender = nft.owner;
 
   activity.transactionHash = info.get("transactionHash");
 

@@ -90,7 +90,7 @@ type Activity @entity {
   type: ActivityType!
   timestamp: BigInt!
 
-  actor: User
+  sender: User!
   recipient: User
   amount: BigInt
 

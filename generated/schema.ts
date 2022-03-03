@@ -767,6 +767,7 @@ export class Activity extends Entity {
     this.set("nft", Value.fromString(""));
     this.set("type", Value.fromString(""));
     this.set("timestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("sender", Value.fromString(""));
     this.set("transactionHash", Value.fromString(""));
   }
 
@@ -823,21 +824,13 @@ export class Activity extends Entity {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get actor(): string | null {
-    let value = this.get("actor");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+  get sender(): string {
+    let value = this.get("sender");
+    return value!.toString();
   }
 
-  set actor(value: string | null) {
-    if (!value) {
-      this.unset("actor");
-    } else {
-      this.set("actor", Value.fromString(<string>value));
-    }
+  set sender(value: string) {
+    this.set("sender", Value.fromString(value));
   }
 
   get recipient(): string | null {

@@ -68,7 +68,7 @@ function save_activity(
   activity.type = "transfer";
   activity.timestamp = BigInt.fromString(info.get("timestamp"));
 
-  activity.actor = old_owner_id;
+  activity.sender = old_owner_id;
   activity.recipient = new_owner_id;
 
   activity.transactionHash = info.get("transactionHash");

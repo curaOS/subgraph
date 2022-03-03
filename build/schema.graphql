@@ -90,7 +90,7 @@ type Activity @entity {
   type: ActivityType!
   timestamp: BigInt!
 
-  actor: User
+  sender: User!
   recipient: User
   amount: BigInt
 
@@ -103,6 +103,7 @@ enum ActivityType @entity {
   transfer
   set_bid
   accept_bid
+  update_bid
   remove_bid
 }
 
