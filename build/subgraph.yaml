@@ -9,7 +9,7 @@ dataSources:
     name: receipts
     source:
       account: test4.ashen99.testnet
-      startBlock: 83663084
+      startBlock: 84096563
     mapping:
       file: receipts/receipts.wasm
       apiVersion: 0.0.5
