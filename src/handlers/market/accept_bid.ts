@@ -59,7 +59,7 @@ function save_activity(
         activity.amount = bid.amount;
     }
     if (token) {
-        activity.actor = token.owner;
+        activity.sender = token.owner;
     }
 
     activity.type = "accept_bid";

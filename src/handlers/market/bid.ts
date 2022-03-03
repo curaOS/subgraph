@@ -99,7 +99,7 @@ function save_activity(
   }
 
   activity.nft = tokenId;
-  activity.actor = bidder;
+  activity.sender = bidder;
   activity.amount = BigInt.fromString(amount);
 
   activity.timestamp = BigInt.fromString(info.get("timestamp"));

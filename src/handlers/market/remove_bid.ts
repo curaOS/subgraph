@@ -53,7 +53,7 @@ function save_activity(
     activity.type = "remove_bid";
 
     activity.nft = tokenId;
-    activity.actor = bidder;
+    activity.sender = bidder;
 
     activity.timestamp = BigInt.fromString(info.get("timestamp"));
     activity.transactionHash = info.get("transactionHash");
