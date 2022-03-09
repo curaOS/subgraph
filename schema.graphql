@@ -179,7 +179,7 @@ type Bid @entity {
   id: ID!
   "NFT which is associated with the Bid"
   nft: Nft!
-  "The date and time in Unix epoch milliseconds"
+  "Bid made date and time in Unix epoch milliseconds"
   timestamp: BigInt!
 
   "Amount of the Bid"
