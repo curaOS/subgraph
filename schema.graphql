@@ -14,13 +14,28 @@ type NftContract @entity {
   parameters: String
 
   # Extra
+  "Mint price of the NFTs in contract"
   mint_price: BigInt!
+
+  "Maximum number of copies for each NFT that contract generate"
   max_copies: Int
+
+  "Maximum number of royalties that can payout for each NFT in the contract"
   default_max_len_payout: Int
+
+  "Number of mints allowed for an account"
   mints_per_address: Int
+
+  "Address that receives the full minting payment"
   mint_payee_id: User
+
+  "Account that is set to receive perpetual royalty amount"
   mint_royalty_id: User
+
+  "Amount of royalty, in percentage, that is set on each minted token"
   mint_royalty_amount: BigInt
+
+  "Minimum amount of a bid that can be placed to a token in contract"
   min_bid_amount: BigInt!
 
   # Stats
