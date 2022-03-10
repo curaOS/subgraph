@@ -19,6 +19,8 @@ export class NftContract extends Entity {
     this.set("spec", Value.fromString(""));
     this.set("name", Value.fromString(""));
     this.set("symbol", Value.fromString(""));
+    this.set("mint_price", Value.fromBigInt(BigInt.zero()));
+    this.set("min_bid_amount", Value.fromBigInt(BigInt.zero()));
     this.set("timestamp", Value.fromBigInt(BigInt.zero()));
     this.set("updated_at", Value.fromBigInt(BigInt.zero()));
     this.set("total_supply", Value.fromBigInt(BigInt.zero()));
@@ -194,6 +196,102 @@ export class NftContract extends Entity {
     } else {
       this.set("parameters", Value.fromString(<string>value));
     }
+  }
+
+  get mint_price(): BigInt {
+    let value = this.get("mint_price");
+    return value!.toBigInt();
+  }
+
+  set mint_price(value: BigInt) {
+    this.set("mint_price", Value.fromBigInt(value));
+  }
+
+  get max_copies(): i32 {
+    let value = this.get("max_copies");
+    return value!.toI32();
+  }
+
+  set max_copies(value: i32) {
+    this.set("max_copies", Value.fromI32(value));
+  }
+
+  get default_max_len_payout(): i32 {
+    let value = this.get("default_max_len_payout");
+    return value!.toI32();
+  }
+
+  set default_max_len_payout(value: i32) {
+    this.set("default_max_len_payout", Value.fromI32(value));
+  }
+
+  get mints_per_address(): i32 {
+    let value = this.get("mints_per_address");
+    return value!.toI32();
+  }
+
+  set mints_per_address(value: i32) {
+    this.set("mints_per_address", Value.fromI32(value));
+  }
+
+  get mint_payee_id(): string | null {
+    let value = this.get("mint_payee_id");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set mint_payee_id(value: string | null) {
+    if (!value) {
+      this.unset("mint_payee_id");
+    } else {
+      this.set("mint_payee_id", Value.fromString(<string>value));
+    }
+  }
+
+  get mint_royalty_id(): string | null {
+    let value = this.get("mint_royalty_id");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set mint_royalty_id(value: string | null) {
+    if (!value) {
+      this.unset("mint_royalty_id");
+    } else {
+      this.set("mint_royalty_id", Value.fromString(<string>value));
+    }
+  }
+
+  get mint_royalty_amount(): BigInt | null {
+    let value = this.get("mint_royalty_amount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set mint_royalty_amount(value: BigInt | null) {
+    if (!value) {
+      this.unset("mint_royalty_amount");
+    } else {
+      this.set("mint_royalty_amount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get min_bid_amount(): BigInt {
+    let value = this.get("min_bid_amount");
+    return value!.toBigInt();
+  }
+
+  set min_bid_amount(value: BigInt) {
+    this.set("min_bid_amount", Value.fromBigInt(value));
   }
 
   get timestamp(): BigInt {

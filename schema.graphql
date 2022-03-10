@@ -13,6 +13,16 @@ type NftContract @entity {
   style_css: String
   parameters: String
 
+  # Extra
+  mint_price: BigInt!
+  max_copies: Int
+  default_max_len_payout: Int
+  mints_per_address: Int
+  mint_payee_id: User
+  mint_royalty_id: User
+  mint_royalty_amount: BigInt
+  min_bid_amount: BigInt!
+
   # Stats
   timestamp: BigInt!
   updated_at: BigInt!
