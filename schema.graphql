@@ -1,5 +1,19 @@
 type NftContract @entity {
   id: ID!
+  metadata: NftContractMetadata! @derivedFrom(field: "contract")
+
+  # Stats
+  timestamp: BigInt!
+  updated_at: BigInt!
+  total_supply: BigInt!
+
+  # Relationships
+  nfts: [Nft!]! @derivedFrom(field: "contract")
+}
+
+type NftContractMetadata @entity {
+  id: ID!
+  contract: NftContract!
 
   # NEP-177
   spec: String!
@@ -37,14 +51,6 @@ type NftContract @entity {
 
   "Minimum amount of a bid that can be placed to a token in contract"
   min_bid_amount: BigInt!
-
-  # Stats
-  timestamp: BigInt!
-  updated_at: BigInt!
-  total_supply: BigInt!
-
-  # Relationships
-  nfts: [Nft!]! @derivedFrom(field: "contract")
 }
 
 type Nft @entity {
