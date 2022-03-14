@@ -12,20 +12,44 @@ type NftContract @entity {
 }
 
 type NftContractMetadata @entity {
+
+  "Metadata ID (Contract ID)"
   id: ID!
+
+  "Contract ID of the particular metadata"
   contract: NftContract!
 
   # NEP-177
+  "Current version of the contract"
   spec: String!
+
+  "Name of the contract"
   name: String!
+
+  "Short symbol phrase of the contract"
   symbol: String!
+
+  "Data URL which contains icon of the contract"
   icon: String
+
+  "Centralized gateway known to have reliable access to decentralized storage assets referenced by `reference` or `media` URLs"
   base_uri: String
+
+  "URL to a JSON file contains more info about the contract"
   reference: String
+
+  "Base64-encoded string of packages script of the contract if there is any"
   packages_script: String
+
+  "Base64-encoded string of the render script of the contract if there is any"
   render_script: String
+
+  "Base64-encoded string of CSS styles of the contract if there is any"
   style_css: String
+
+  "Base64-encoded string of Parameters of the contract if there is any"
   parameters: String
+
 
   # Extra
   "Mint price of the NFTs in contract"
