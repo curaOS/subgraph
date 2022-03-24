@@ -1,5 +1,5 @@
-import { BigInt, JSONValue } from "@graphprotocol/graph-ts";
-import { Bid } from "../../../generated/schema";
+import {BigInt, json, JSONValue, log, store} from "@graphprotocol/graph-ts";
+import {Activity, Bid, Nft, User} from "../../../generated/schema";
 import { assert_json } from "../../utils/assert";
 
 export default function bid(
@@ -28,6 +28,12 @@ export default function bid(
   if (!assert_json(currency, "string", "bid.currency")) return;
 
   for (let i = 0; i < token_ids.length; i++) {
+    let bid = Bid.load(`${token_ids[i].toString()}-${bidder.toString()}`)
+
+    update_user(
+        bidder.toString(),
+        token_ids[i].toString()
+    )
     save_bid(
       token_ids[i].toString(),
       bidder.toString(),
@@ -37,6 +43,14 @@ export default function bid(
       currency.toString(),
       info
     );
+    save_activity(
+        token_ids[i].toString(),
+        bidder.toString(),
+        amount.toString(),
+        bid ? true : false,
+        info
+    )
+
   }
 }
 
@@ -64,4 +78,52 @@ function save_bid(
   bid.accepted = false
 
   bid.save();
+}
+
+
+function save_activity(
+    tokenId: string,
+    bidder: string,
+    amount: string,
+    updatedBid: boolean,
+    info: Map<string, string>
+): Activity {
+  const id = `${tokenId}-${bidder}/${info.get("timestamp")}`;
+
+  const activity = new Activity(id);
+
+  if(updatedBid){
+    activity.type = "update_bid";
+  } else {
+    activity.type = "set_bid";
+  }
+
+  activity.nft = tokenId;
+  activity.sender = bidder;
+  activity.amount = BigInt.fromString(amount);
+
+  activity.timestamp = BigInt.fromString(info.get("timestamp"));
+  activity.transactionHash = info.get("transactionHash");
+
+  activity.save();
+
+  return activity;
+}
+
+
+function update_user(
+    address: string,
+    tokenId: string,
+): void {
+  let user = User.load(address);
+
+  // if account doesn't exist save new account
+  if (!user) {
+    user = new User(address);
+    user.total_owned = BigInt.zero();
+    user.total_minted = BigInt.zero();
+  }
+
+
+  user.save();
 }

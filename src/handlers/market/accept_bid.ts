@@ -1,5 +1,5 @@
-import { JSONValue } from "@graphprotocol/graph-ts";
-import { Bid } from "../../../generated/schema";
+import {BigInt, JSONValue} from "@graphprotocol/graph-ts";
+import {Activity, Bid, Nft} from "../../../generated/schema";
 import { assert_json } from "../../utils/assert";
 
 export default function accept_bid(
@@ -20,6 +20,11 @@ export default function accept_bid(
             token_ids[i].toString(),
             bidder.toString(),
         );
+        save_activity(
+            token_ids[i].toString(),
+            bidder.toString(),
+            info
+        );
     }
 }
 
@@ -35,4 +40,37 @@ function update_bid(
 
     bid.save();
     return bid;
+}
+
+
+function save_activity(
+    tokenId: string,
+    bidder: string,
+    info: Map<string, string>
+): Activity {
+    const id = `${tokenId}-${bidder}/${info.get("timestamp")}`;
+
+    const activity = new Activity(id);
+
+    let token = Nft.load(`${tokenId}`);
+    let bid = Bid.load(`${tokenId}-${bidder}`);
+
+    if (bid) {
+        activity.amount = bid.amount;
+    }
+    if (token) {
+        activity.sender = token.owner;
+    }
+
+    activity.type = "accept_bid";
+    activity.nft = tokenId;
+
+    activity.recipient = bidder;
+
+    activity.timestamp = BigInt.fromString(info.get("timestamp"));
+    activity.transactionHash = info.get("transactionHash");
+
+    activity.save();
+
+    return activity;
 }

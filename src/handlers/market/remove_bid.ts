@@ -1,5 +1,6 @@
-import { JSONValue, store } from "@graphprotocol/graph-ts";
+import {BigInt, JSONValue, store} from "@graphprotocol/graph-ts";
 import { assert_json } from "../../utils/assert";
+import {Activity} from "../../../generated/schema";
 
 export default function remove_bid(
     event_data: JSONValue,
@@ -19,6 +20,11 @@ export default function remove_bid(
             token_ids[i].toString(),
             bidder.toString(),
         );
+        save_activity(
+            token_ids[i].toString(),
+            bidder.toString(),
+            info
+        );
     }
 }
 
@@ -32,4 +38,27 @@ function remove(
         return true;
     }
     return false;
+}
+
+
+function save_activity(
+    tokenId: string,
+    bidder: string,
+    info: Map<string, string>
+): Activity {
+    const id = `${tokenId}-${bidder}/${info.get("timestamp")}`;
+
+    const activity = new Activity(id);
+
+    activity.type = "remove_bid";
+
+    activity.nft = tokenId;
+    activity.sender = bidder;
+
+    activity.timestamp = BigInt.fromString(info.get("timestamp"));
+    activity.transactionHash = info.get("transactionHash");
+
+    activity.save();
+
+    return activity;
 }

@@ -1,4 +1,6 @@
 type NftContract @entity {
+
+  "ID of the contract (Account ID)"
   id: ID!
   metadata: NftContractMetadata! @derivedFrom(field: "contract")
 
@@ -78,102 +80,159 @@ type NftContractMetadata @entity {
 }
 
 type Nft @entity {
+
+  "NFT ID"
   id: ID!
 
   # Relationships
+  "Contract that particular NFT is stored"
   contract: NftContract!
+  "Metadata object of the NFT that describes the NFT"
   metadata: NftMetadata! @derivedFrom(field: "nft")
+  "NFT history"
   history: [Activity!]! @derivedFrom(field: "nft")
 
   # Ownership
+  "Current owner who owns the NFT"
   owner: User!
+  "Creator who created or minted this NFT, this could be the artist or collective in case of a generative art project"
   creator: User!
+  "Previous owner of the NFT"
   prev_owner: User
 
   # Market
   ## royalties
+  "Royalties of the respective NFT"
   royalties: [User!]
+  "Percentage of the balance to be divided to the royalties"
   royalties_percentage: Int
 
   ## ask
   askedPrice: Int
 
   ## shares
+  "Share value of the current owner"
   owner_share: Int
+  "Share value of the creator"
   creator_share: Int
+  "Share value of the previous owner"
   prev_owner_share: Int
 
   ## bids
+  "Bids made for the NFT"
   bids: [Bid!] @derivedFrom(field: "nft")
 }
 
 type NftMetadata @entity {
+
+  "Metadata ID (NFT ID)"
   id: ID!
+  "NFT of the particular metadata"
   nft: Nft!
 
+  "Title of the NFT"
   title: String!
+  "NFT description"
   description: String
+  "URL to associated media for the NFT. Preferably to decentralized, content-addressed storage"
   media: String!
+  "Base64-encoded sha256 hash of content referenced by the `media` field if the media has an animation."
   media_animation: String
+  "Base64-encoded sha256 hash of content referenced by the `media` field. Required if `media` is included."
   media_hash: String
+  "Number of copies of this set of metadata in existence when NFT was minted."
   copies: Int
+  "Anything extra that the NFT wants to store on-chain. Can be stringified JSON."
   extra: String
+  "A link to a valid JSON file containing various keys offering supplementary details on the NFT"
   reference: String
+  "Base64-encoded sha256 hash of the JSON file contained in the reference field"
   reference_hash: String
+  "NFT issue or mint date and time in Unix epoch milliseconds"
   issued_at: String
+  "NFT starts to being valid date and time in Unix epoch milliseconds"
   starts_at: String
+  "NFT last updated date and time in Unix epoch milliseconds"
   updated_at: String
+  "NFT expiring date and time in Unix epoch milliseconds"
   expires_at: String
 }
 
 type User @entity {
+
+  "User ID"
   id: ID!
 
   # Relationships
+  "Owned NFTs"
   ownedNfts: [Nft!] @derivedFrom(field: "owner")
+  "Created NFTs"
   createdNfts: [Nft!] @derivedFrom(field: "creator")
+  "Bids made by the user"
   bids: [Bid!] @derivedFrom(field: "bidder")
 
   # Stats
+  "Number of NFTs owned by the user"
   total_owned: BigInt!
+  "Number of NFTs minted by the owner"
   total_minted: BigInt!
 }
 
 type Activity @entity {
+
+  "Activity ID"
   id: ID!
+  "NFT which is associated with this action"
   nft: Nft!
+  "Type of the action"
   type: ActivityType!
+  "The date and time of this action in Unix epoch milliseconds"
   timestamp: BigInt!
 
-  # mint activity
-  mintBy: User
+  sender: User!
+  recipient: User
+  amount: BigInt
 
-  # burn activity
-  burnBy: User
-
-  # transfer activity
-  transferFrom: User
-  transferTo: User
-
+  "TransactionHash which is associated with this action"
   transactionHash: String!
 }
 
 enum ActivityType @entity {
+
+  "NFT was minted"
   mint
+  "NFT was burned"
   burn
+  "NFT was transferred to another account"
   transfer
+  set_bid
+  accept_bid
+  update_bid
+  remove_bid
 }
 
 type Bid @entity {
+
+  "Bid ID"
   id: ID!
+  "NFT which is associated with the Bid"
   nft: Nft!
+  "The date and time in Unix epoch milliseconds"
   timestamp: BigInt!
 
+  "Amount of the Bid"
   amount: BigInt!
+  "User who made the Bid"
   bidder: User!
-  recipient: User!
+  "NFT which is associated with the Bid"
+  recipient: Nft!
+  "Percentage of the amount that, on the next sale, goes to current owner, which after accepting bid becomes previous owner"
   sell_on_share: Int!
+  "Currency used to bid"
   currency: String!
 
+  "Whether the Bid is accepted by the owner or not"
   accepted: Boolean!
 }
+
+
