@@ -46,7 +46,7 @@ function save_activity(tokenId: string, info: Map<string, string>): Activity {
   activity.type = "burn";
   activity.timestamp = BigInt.fromString(info.get("timestamp"));
 
-  activity.burnBy = info.get("signerId");
+  activity.sender = info.get("signerId");
 
   activity.transactionHash = info.get("transactionHash");
 

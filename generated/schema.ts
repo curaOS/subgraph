@@ -767,6 +767,7 @@ export class Activity extends Entity {
     this.set("nft", Value.fromString(""));
     this.set("type", Value.fromString(""));
     this.set("timestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("sender", Value.fromString(""));
     this.set("transactionHash", Value.fromString(""));
   }
 
@@ -823,8 +824,17 @@ export class Activity extends Entity {
     this.set("timestamp", Value.fromBigInt(value));
   }
 
-  get mintBy(): string | null {
-    let value = this.get("mintBy");
+  get sender(): string {
+    let value = this.get("sender");
+    return value!.toString();
+  }
+
+  set sender(value: string) {
+    this.set("sender", Value.fromString(value));
+  }
+
+  get recipient(): string | null {
+    let value = this.get("recipient");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -832,62 +842,28 @@ export class Activity extends Entity {
     }
   }
 
-  set mintBy(value: string | null) {
+  set recipient(value: string | null) {
     if (!value) {
-      this.unset("mintBy");
+      this.unset("recipient");
     } else {
-      this.set("mintBy", Value.fromString(<string>value));
+      this.set("recipient", Value.fromString(<string>value));
     }
   }
 
-  get burnBy(): string | null {
-    let value = this.get("burnBy");
+  get amount(): BigInt | null {
+    let value = this.get("amount");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBigInt();
     }
   }
 
-  set burnBy(value: string | null) {
+  set amount(value: BigInt | null) {
     if (!value) {
-      this.unset("burnBy");
+      this.unset("amount");
     } else {
-      this.set("burnBy", Value.fromString(<string>value));
-    }
-  }
-
-  get transferFrom(): string | null {
-    let value = this.get("transferFrom");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set transferFrom(value: string | null) {
-    if (!value) {
-      this.unset("transferFrom");
-    } else {
-      this.set("transferFrom", Value.fromString(<string>value));
-    }
-  }
-
-  get transferTo(): string | null {
-    let value = this.get("transferTo");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set transferTo(value: string | null) {
-    if (!value) {
-      this.unset("transferTo");
-    } else {
-      this.set("transferTo", Value.fromString(<string>value));
+      this.set("amount", Value.fromBigInt(<BigInt>value));
     }
   }
 

@@ -149,15 +149,9 @@ type Activity @entity {
   "The date and time of this action in Unix epoch milliseconds"
   timestamp: BigInt!
 
-  # mint activity
-  mintBy: User
-
-  # burn activity
-  burnBy: User
-
-  # transfer activity
-  transferFrom: User
-  transferTo: User
+  sender: User!
+  recipient: User
+  amount: BigInt
 
   "TransactionHash which is associated with this action"
   transactionHash: String!
@@ -171,6 +165,10 @@ enum ActivityType @entity {
   burn
   "NFT was transferred to another account"
   transfer
+  set_bid
+  accept_bid
+  update_bid
+  remove_bid
 }
 
 type Bid @entity {
@@ -196,3 +194,5 @@ type Bid @entity {
   "Whether the Bid is accepted by the owner or not"
   accepted: Boolean!
 }
+
+
