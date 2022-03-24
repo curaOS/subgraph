@@ -2,11 +2,15 @@ type NftContract @entity {
 
   "ID of the contract (Account ID)"
   id: ID!
+  "Metadata of the contract"
   metadata: NftContractMetadata! @derivedFrom(field: "contract")
 
   # Stats
+  "Contract created date and time in Unix epoch milliseconds"
   timestamp: BigInt!
+  "Contract last updated date and time in Unix epoch milliseconds"
   updated_at: BigInt!
+  "Total number of NFTs in the contract"
   total_supply: BigInt!
 
   # Relationships

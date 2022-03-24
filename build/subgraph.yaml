@@ -16,7 +16,6 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - NftContract
-        - NftContractMetadata
         - Nft
         - NftMetadata
         - User
