@@ -8,8 +8,8 @@ dataSources:
     network: near-testnet
     name: receipts
     source:
-      account: cura-0_0_13.creatify.testnet
-      startBlock: 82758949
+      account: 0_1_5.bscs-x.testnet
+      startBlock: 85894426
     mapping:
       file: receipts/receipts.wasm
       apiVersion: 0.0.5

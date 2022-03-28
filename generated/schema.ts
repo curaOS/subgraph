@@ -16,9 +16,6 @@ export class NftContract extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("spec", Value.fromString(""));
-    this.set("name", Value.fromString(""));
-    this.set("symbol", Value.fromString(""));
     this.set("timestamp", Value.fromBigInt(BigInt.zero()));
     this.set("updated_at", Value.fromBigInt(BigInt.zero()));
     this.set("total_supply", Value.fromBigInt(BigInt.zero()));
@@ -48,6 +45,102 @@ export class NftContract extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get metadata(): string {
+    let value = this.get("metadata");
+    return value!.toString();
+  }
+
+  set metadata(value: string) {
+    this.set("metadata", Value.fromString(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value!.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get updated_at(): BigInt {
+    let value = this.get("updated_at");
+    return value!.toBigInt();
+  }
+
+  set updated_at(value: BigInt) {
+    this.set("updated_at", Value.fromBigInt(value));
+  }
+
+  get total_supply(): BigInt {
+    let value = this.get("total_supply");
+    return value!.toBigInt();
+  }
+
+  set total_supply(value: BigInt) {
+    this.set("total_supply", Value.fromBigInt(value));
+  }
+
+  get nfts(): Array<string> {
+    let value = this.get("nfts");
+    return value!.toStringArray();
+  }
+
+  set nfts(value: Array<string>) {
+    this.set("nfts", Value.fromStringArray(value));
+  }
+}
+
+export class NftContractMetadata extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("contract", Value.fromString(""));
+    this.set("spec", Value.fromString(""));
+    this.set("name", Value.fromString(""));
+    this.set("symbol", Value.fromString(""));
+    this.set("mint_price", Value.fromBigInt(BigInt.zero()));
+    this.set("min_bid_amount", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save NftContractMetadata entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save NftContractMetadata entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("NftContractMetadata", id.toString(), this);
+    }
+  }
+
+  static load(id: string): NftContractMetadata | null {
+    return changetype<NftContractMetadata | null>(
+      store.get("NftContractMetadata", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get contract(): string {
+    let value = this.get("contract");
+    return value!.toString();
+  }
+
+  set contract(value: string) {
+    this.set("contract", Value.fromString(value));
   }
 
   get spec(): string {
@@ -128,6 +221,102 @@ export class NftContract extends Entity {
     }
   }
 
+  get mint_price(): BigInt {
+    let value = this.get("mint_price");
+    return value!.toBigInt();
+  }
+
+  set mint_price(value: BigInt) {
+    this.set("mint_price", Value.fromBigInt(value));
+  }
+
+  get max_copies(): i32 {
+    let value = this.get("max_copies");
+    return value!.toI32();
+  }
+
+  set max_copies(value: i32) {
+    this.set("max_copies", Value.fromI32(value));
+  }
+
+  get default_max_len_payout(): i32 {
+    let value = this.get("default_max_len_payout");
+    return value!.toI32();
+  }
+
+  set default_max_len_payout(value: i32) {
+    this.set("default_max_len_payout", Value.fromI32(value));
+  }
+
+  get mints_per_address(): i32 {
+    let value = this.get("mints_per_address");
+    return value!.toI32();
+  }
+
+  set mints_per_address(value: i32) {
+    this.set("mints_per_address", Value.fromI32(value));
+  }
+
+  get mint_payee_id(): string | null {
+    let value = this.get("mint_payee_id");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set mint_payee_id(value: string | null) {
+    if (!value) {
+      this.unset("mint_payee_id");
+    } else {
+      this.set("mint_payee_id", Value.fromString(<string>value));
+    }
+  }
+
+  get mint_royalty_id(): string | null {
+    let value = this.get("mint_royalty_id");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set mint_royalty_id(value: string | null) {
+    if (!value) {
+      this.unset("mint_royalty_id");
+    } else {
+      this.set("mint_royalty_id", Value.fromString(<string>value));
+    }
+  }
+
+  get mint_royalty_amount(): BigInt | null {
+    let value = this.get("mint_royalty_amount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set mint_royalty_amount(value: BigInt | null) {
+    if (!value) {
+      this.unset("mint_royalty_amount");
+    } else {
+      this.set("mint_royalty_amount", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get min_bid_amount(): BigInt {
+    let value = this.get("min_bid_amount");
+    return value!.toBigInt();
+  }
+
+  set min_bid_amount(value: BigInt) {
+    this.set("min_bid_amount", Value.fromBigInt(value));
+  }
+
   get packages_script(): string | null {
     let value = this.get("packages_script");
     if (!value || value.kind == ValueKind.NULL) {
@@ -194,42 +383,6 @@ export class NftContract extends Entity {
     } else {
       this.set("parameters", Value.fromString(<string>value));
     }
-  }
-
-  get timestamp(): BigInt {
-    let value = this.get("timestamp");
-    return value!.toBigInt();
-  }
-
-  set timestamp(value: BigInt) {
-    this.set("timestamp", Value.fromBigInt(value));
-  }
-
-  get updated_at(): BigInt {
-    let value = this.get("updated_at");
-    return value!.toBigInt();
-  }
-
-  set updated_at(value: BigInt) {
-    this.set("updated_at", Value.fromBigInt(value));
-  }
-
-  get total_supply(): BigInt {
-    let value = this.get("total_supply");
-    return value!.toBigInt();
-  }
-
-  set total_supply(value: BigInt) {
-    this.set("total_supply", Value.fromBigInt(value));
-  }
-
-  get nfts(): Array<string> {
-    let value = this.get("nfts");
-    return value!.toStringArray();
-  }
-
-  set nfts(value: Array<string>) {
-    this.set("nfts", Value.fromStringArray(value));
   }
 }
 
