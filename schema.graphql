@@ -44,18 +44,6 @@ type NftContractMetadata @entity {
   "URL to a JSON file contains more info about the contract"
   reference: String
 
-  "Base64-encoded string of packages script of the contract if there is any"
-  packages_script: String
-
-  "Base64-encoded string of the render script of the contract if there is any"
-  render_script: String
-
-  "Base64-encoded string of CSS styles of the contract if there is any"
-  style_css: String
-
-  "Base64-encoded string of Parameters of the contract if there is any"
-  parameters: String
-
 
   # Extra
   "Mint price of the NFTs in contract"
@@ -81,6 +69,18 @@ type NftContractMetadata @entity {
 
   "Minimum amount of a bid that can be placed to a token in contract"
   min_bid_amount: BigInt!
+
+  "Base64-encoded string of packages script of the contract if there is any"
+  packages_script: String
+
+  "Base64-encoded string of the render script of the contract if there is any"
+  render_script: String
+
+  "Base64-encoded string of CSS styles of the contract if there is any"
+  style_css: String
+
+  "Base64-encoded string of Parameters of the contract if there is any"
+  parameters: String
 }
 
 type Nft @entity {

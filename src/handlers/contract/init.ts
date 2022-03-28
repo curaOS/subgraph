@@ -1,5 +1,5 @@
-import { BigInt, JSONValue } from "@graphprotocol/graph-ts";
-import {NftContract, NftContractMetadata} from "../../../generated/schema";
+import {BigInt, JSONValue, log} from "@graphprotocol/graph-ts";
+import {NftContract, NftContractMetadata } from "../../../generated/schema";
 import { assert_json } from "../../utils/assert";
 
 export default function init(
@@ -7,11 +7,13 @@ export default function init(
   info: Map<string, string>
 ): void {
   const metadata = event_data.toObject().get("metadata")!;
+  const extra = event_data.toObject().get("extra")!;
 
   if (!assert_json(metadata, "object", "init.data.metadata")) return;
+  if (!assert_json(extra, "object", "init.data.extra")) return;
 
   save_contract(metadata, info);
-  save_contract_metadata(metadata, info)
+  save_contract_metadata(metadata, extra, info)
 }
 
 function save_contract(metadata: JSONValue, info: Map<string, string>): void {
@@ -28,7 +30,7 @@ function save_contract(metadata: JSONValue, info: Map<string, string>): void {
 }
 
 
-function save_contract_metadata (metadata: JSONValue, info: Map<string, string>): void {
+function save_contract_metadata (metadata: JSONValue, extra: JSONValue, info: Map<string, string>): void {
   // create a new NftContractMetadata entity with the contractAddress as id
   const contract_metadata = new NftContractMetadata(`${info.get("contract")}`);
 
@@ -36,6 +38,7 @@ function save_contract_metadata (metadata: JSONValue, info: Map<string, string>)
 
   // map metadata object into the contract entity
   const entries = metadata.toObject().entries;
+  const entriesExtra = extra.toObject().entries;
 
   for (let i = 0; i < entries.length; i++) {
     const key = entries[i].key;
@@ -60,18 +63,14 @@ function save_contract_metadata (metadata: JSONValue, info: Map<string, string>)
       case key == "reference":
         contract_metadata.reference = assert_json(value, "string", "save_contract_metadata.reference") ? value.toString() : "";
         break;
-      case key == "packages_script":
-        contract_metadata.packages_script = assert_json(value, "string", "save_contract_metadata.packages_script") ? value.toString() : "";
-        break;
-      case key == "render_script":
-        contract_metadata.render_script = assert_json(value, "string", "save_contract_metadata.render_script") ? value.toString() : "";
-        break;
-      case key == "style_css":
-        contract_metadata.style_css = assert_json(value, "string", "save_contract_metadata.style_css") ? value.toString() : "";
-        break;
-      case key == "parameters":
-        contract_metadata.parameters = assert_json(value, "string", "save_contract_metadata.parameters") ? value.toString() : "";
-        break;
+    }
+  }
+
+  for (let i = 0; i < entriesExtra.length; i++) {
+    const key = entriesExtra[i].key;
+    const value = entriesExtra[i].value;
+
+    switch (true) {
       case key == "mint_price":
         contract_metadata.mint_price = assert_json(value, "number", "save_contract_metadata.mint_price") ? value.toBigInt() : new BigInt(0);
         break;
@@ -95,6 +94,18 @@ function save_contract_metadata (metadata: JSONValue, info: Map<string, string>)
         break;
       case key == "min_bid_amount":
         contract_metadata.min_bid_amount = assert_json(value, "number", "save_contract_metadata.min_bid_amount") ? value.toBigInt() : new BigInt(0);
+        break;
+      case key == "packages_script":
+        contract_metadata.packages_script = assert_json(value, "string", "save_contract_metadata.packages_script") ? value.toString() : "";
+        break;
+      case key == "render_script":
+        contract_metadata.render_script = assert_json(value, "string", "save_contract_metadata.render_script") ? value.toString() : "";
+        break;
+      case key == "style_css":
+        contract_metadata.style_css = assert_json(value, "string", "save_contract_metadata.style_css") ? value.toString() : "";
+        break;
+      case key == "parameters":
+        contract_metadata.parameters = assert_json(value, "string", "save_contract_metadata.parameters") ? value.toString() : "";
         break;
     }
   }

@@ -221,74 +221,6 @@ export class NftContractMetadata extends Entity {
     }
   }
 
-  get packages_script(): string | null {
-    let value = this.get("packages_script");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set packages_script(value: string | null) {
-    if (!value) {
-      this.unset("packages_script");
-    } else {
-      this.set("packages_script", Value.fromString(<string>value));
-    }
-  }
-
-  get render_script(): string | null {
-    let value = this.get("render_script");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set render_script(value: string | null) {
-    if (!value) {
-      this.unset("render_script");
-    } else {
-      this.set("render_script", Value.fromString(<string>value));
-    }
-  }
-
-  get style_css(): string | null {
-    let value = this.get("style_css");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set style_css(value: string | null) {
-    if (!value) {
-      this.unset("style_css");
-    } else {
-      this.set("style_css", Value.fromString(<string>value));
-    }
-  }
-
-  get parameters(): string | null {
-    let value = this.get("parameters");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set parameters(value: string | null) {
-    if (!value) {
-      this.unset("parameters");
-    } else {
-      this.set("parameters", Value.fromString(<string>value));
-    }
-  }
-
   get mint_price(): BigInt {
     let value = this.get("mint_price");
     return value!.toBigInt();
@@ -383,6 +315,74 @@ export class NftContractMetadata extends Entity {
 
   set min_bid_amount(value: BigInt) {
     this.set("min_bid_amount", Value.fromBigInt(value));
+  }
+
+  get packages_script(): string | null {
+    let value = this.get("packages_script");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set packages_script(value: string | null) {
+    if (!value) {
+      this.unset("packages_script");
+    } else {
+      this.set("packages_script", Value.fromString(<string>value));
+    }
+  }
+
+  get render_script(): string | null {
+    let value = this.get("render_script");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set render_script(value: string | null) {
+    if (!value) {
+      this.unset("render_script");
+    } else {
+      this.set("render_script", Value.fromString(<string>value));
+    }
+  }
+
+  get style_css(): string | null {
+    let value = this.get("style_css");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set style_css(value: string | null) {
+    if (!value) {
+      this.unset("style_css");
+    } else {
+      this.set("style_css", Value.fromString(<string>value));
+    }
+  }
+
+  get parameters(): string | null {
+    let value = this.get("parameters");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set parameters(value: string | null) {
+    if (!value) {
+      this.unset("parameters");
+    } else {
+      this.set("parameters", Value.fromString(<string>value));
+    }
   }
 }
 
