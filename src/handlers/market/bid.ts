@@ -103,7 +103,9 @@ function save_activity(
   activity.amount = BigInt.fromString(amount);
 
   activity.timestamp = BigInt.fromString(info.get("timestamp"));
-  activity.transactionHash = info.get("transactionHash");
+  activity.transaction_hash = info.get("transactionHash");
+  activity.receipt_id = info.get("receiptId")
+  activity.block_height = info.get("blockHeight")
 
   activity.save();
 
