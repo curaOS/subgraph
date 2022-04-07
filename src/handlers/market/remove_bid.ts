@@ -46,7 +46,7 @@ function save_activity(
     bidder: string,
     info: Map<string, string>
 ): Activity {
-    const id = `${tokenId}-${bidder}/${info.get("timestamp")}`;
+    const id = `${tokenId}_${info.get("timestamp")}`;
 
     const activity = new Activity(id);
 

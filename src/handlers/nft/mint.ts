@@ -1,4 +1,4 @@
-import { BigInt, JSONValue, log, TypedMapEntry } from "@graphprotocol/graph-ts";
+import { BigInt, JSONValue, log } from "@graphprotocol/graph-ts";
 import {
   User,
   Activity,
@@ -205,7 +205,7 @@ function save_metadata(token: JSONValue, metadata: JSONValue): NftMetadata | nul
 }
 
 function save_activity(nft: Nft, info: Map<string, string>): Activity {
-  const id = `${nft.id}/${info.get("timestamp")}`;
+  const id = `${nft.id}_${info.get("timestamp")}`;
 
   const activity = new Activity(id);
 
