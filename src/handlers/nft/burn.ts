@@ -38,7 +38,7 @@ function remove_nft(id: string): boolean {
 }
 
 function save_activity(tokenId: string, info: Map<string, string>): Activity {
-  const id = `${tokenId}/${info.get("timestamp")}`;
+  const id = `${tokenId}_${info.get("timestamp")}`;
 
   const activity = new Activity(id);
 

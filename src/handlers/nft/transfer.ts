@@ -60,7 +60,7 @@ function save_activity(
   old_owner_id: string,
   info: Map<string, string>
 ): Activity {
-  const id = `${nft.id}/${info.get("timestamp")}`;
+  const id = `${nft.id}_${info.get("timestamp")}`;
 
   const activity = new Activity(id);
 
