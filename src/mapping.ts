@@ -6,7 +6,7 @@ import { getReceiptInfo } from "./utils/helpers";
 import {stringifyJson} from "./utils/debug";
 
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
-  log.info('Receipt: ' + receipt, []);
+  // log.info('Receipt: ' + receipt, []);
 
 
   const actions = receipt.receipt.actions;

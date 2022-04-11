@@ -200,8 +200,12 @@ type Activity @entity {
   "Amount associated with the transaction if the event is related to the bid or mint"
   amount: BigInt
 
-  "TransactionHash which is associated with this action"
-  transactionHash: String!
+  "Transaction hash which is associated with this action"
+  transaction_hash: String!
+  "Receipt id of the action"
+  receipt_id: String!
+  "Block number where tx with relevant receipt id has been executed"
+  block_height: String!
 }
 
 enum ActivityType @entity {

@@ -921,7 +921,9 @@ export class Activity extends Entity {
     this.set("type", Value.fromString(""));
     this.set("timestamp", Value.fromBigInt(BigInt.zero()));
     this.set("sender", Value.fromString(""));
-    this.set("transactionHash", Value.fromString(""));
+    this.set("transaction_hash", Value.fromString(""));
+    this.set("receipt_id", Value.fromString(""));
+    this.set("block_height", Value.fromString(""));
   }
 
   save(): void {
@@ -1020,13 +1022,31 @@ export class Activity extends Entity {
     }
   }
 
-  get transactionHash(): string {
-    let value = this.get("transactionHash");
+  get transaction_hash(): string {
+    let value = this.get("transaction_hash");
     return value!.toString();
   }
 
-  set transactionHash(value: string) {
-    this.set("transactionHash", Value.fromString(value));
+  set transaction_hash(value: string) {
+    this.set("transaction_hash", Value.fromString(value));
+  }
+
+  get receipt_id(): string {
+    let value = this.get("receipt_id");
+    return value!.toString();
+  }
+
+  set receipt_id(value: string) {
+    this.set("receipt_id", Value.fromString(value));
+  }
+
+  get block_height(): string {
+    let value = this.get("block_height");
+    return value!.toString();
+  }
+
+  set block_height(value: string) {
+    this.set("block_height", Value.fromString(value));
   }
 }
 

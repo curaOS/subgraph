@@ -8,8 +8,8 @@ dataSources:
     network: near-testnet
     name: receipts
     source:
-      account: 0_1_5.bscs-x.testnet
-      startBlock: 85894426
+      account: test6.ashen99.testnet
+      startBlock: 82758949
     mapping:
       file: receipts/receipts.wasm
       apiVersion: 0.0.5

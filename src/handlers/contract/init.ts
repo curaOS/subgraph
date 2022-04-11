@@ -1,5 +1,5 @@
 import {BigInt, JSONValue, log} from "@graphprotocol/graph-ts";
-import {NftContract, NftContractMetadata } from "../../../generated/schema";
+import {NftContract, NftContractMetadata, User} from "../../../generated/schema";
 import { assert_json } from "../../utils/assert";
 
 export default function init(
@@ -84,9 +84,11 @@ function save_contract_metadata (metadata: JSONValue, extra: JSONValue, info: Ma
         contract_metadata.mints_per_address = assert_json(value, "number", "save_contract_metadata.mints_per_address") ? (value.toU64() as i32) : 100;
         break;
       case key == "mint_payee_id":
+        update_user(value.toString());
         contract_metadata.mint_payee_id = assert_json(value, "string", "save_contract_metadata.mint_payee_id") ? value.toString() : "";
         break;
       case key == "mint_royalty_id":
+        update_user(value.toString());
         contract_metadata.mint_royalty_id = assert_json(value, "string", "save_contract_metadata.mint_royalty_id") ? value.toString() : "";
         break;
       case key == "mint_royalty_amount":
@@ -112,4 +114,17 @@ function save_contract_metadata (metadata: JSONValue, extra: JSONValue, info: Ma
 
   // Save NftContract entity
   contract_metadata.save();
+}
+
+function update_user(address: string): void {
+  let user = User.load(address);
+
+  // if account doesn't exist save new account
+  if (!user) {
+    user = new User(address);
+    user.total_owned = BigInt.zero();
+    user.total_minted = BigInt.zero();
+  }
+
+  user.save();
 }
