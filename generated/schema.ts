@@ -923,7 +923,7 @@ export class Activity extends Entity {
     this.set("sender", Value.fromString(""));
     this.set("transaction_hash", Value.fromString(""));
     this.set("receipt_id", Value.fromString(""));
-    this.set("block_height", Value.fromString(""));
+    this.set("block_hash_58", Value.fromString(""));
   }
 
   save(): void {
@@ -1040,13 +1040,13 @@ export class Activity extends Entity {
     this.set("receipt_id", Value.fromString(value));
   }
 
-  get block_height(): string {
-    let value = this.get("block_height");
+  get block_hash_58(): string {
+    let value = this.get("block_hash_58");
     return value!.toString();
   }
 
-  set block_height(value: string) {
-    this.set("block_height", Value.fromString(value));
+  set block_hash_58(value: string) {
+    this.set("block_hash_58", Value.fromString(value));
   }
 }
 

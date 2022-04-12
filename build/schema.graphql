@@ -204,8 +204,8 @@ type Activity @entity {
   transaction_hash: String!
   "Receipt id of the action"
   receipt_id: String!
-  "Block number where tx with relevant receipt id has been executed"
-  block_height: String!
+  "Base 58 hash of block number where tx with relevant receipt id has been executed"
+  block_hash_58: String!
 }
 
 enum ActivityType @entity {
