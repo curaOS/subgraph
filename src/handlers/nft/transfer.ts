@@ -73,7 +73,7 @@ function save_activity(
 
   activity.transaction_hash = info.get("transactionHash");
   activity.receipt_id = info.get("receiptId")
-  activity.block_height = info.get("blockHeight")
+  activity.block_hash_58 = info.get("blockHash58")
 
   activity.save();
   return activity;

@@ -10,13 +10,13 @@ export function getReceiptInfo(
   const timestamp = receipt.block.header.timestampNanosec.toString();
   const receiptId = receipt.receipt.id.toBase58();
   const signerId = receipt.receipt.signerId.toString();
-  const blockHeight = receipt.block.header.height.toString()
+  const blockHash58 = receipt.block.header.hash.toBase58()
 
   map.set("contract", contractAdress);
   map.set("timestamp", timestamp);
   map.set("signerId", signerId);
 
-  map.set("blockHeight", blockHeight);
+  map.set("blockHash58", blockHash58);
   map.set("receiptId", receiptId);
   // Tx HASH is not available on The Graph
   map.set("transactionHash", '')

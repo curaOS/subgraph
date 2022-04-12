@@ -50,7 +50,7 @@ function save_activity(tokenId: string, info: Map<string, string>): Activity {
 
   activity.transaction_hash = info.get("transactionHash");
   activity.receipt_id = info.get("receiptId")
-  activity.block_height = info.get("blockHeight")
+  activity.block_hash_58 = info.get("blockHash58")
 
   activity.save();
   return activity;
