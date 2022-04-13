@@ -64,7 +64,7 @@ type NftContractMetadata @entity {
   "Account that is set to receive perpetual royalty amount"
   mint_royalty_id: User
 
-  "Amount of royalty, in percentage, that is set on each minted token"
+  "Amount of royalty, in (percentage * 100) format, that is set on each minted token"
   mint_royalty_amount: BigInt
 
   "Minimum amount of a bid that can be placed to a token in contract"
