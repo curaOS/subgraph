@@ -47,7 +47,7 @@ type NftContractMetadata @entity {
 
   # Extra
   "Mint price of the NFTs in contract"
-  mint_price: BigInt!
+  mint_price: String!
 
   "Maximum number of copies for each NFT that contract generate"
   max_copies: Int

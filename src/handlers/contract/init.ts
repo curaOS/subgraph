@@ -72,7 +72,7 @@ function save_contract_metadata (metadata: JSONValue, extra: JSONValue, info: Ma
 
     switch (true) {
       case key == "mint_price":
-        contract_metadata.mint_price = assert_json(value, "number", "save_contract_metadata.mint_price") ? value.toBigInt() : new BigInt(0);
+        contract_metadata.mint_price = assert_json(value, "string", "save_contract_metadata.mint_price") ? value.toString() : "0";
         break;
       case key == "max_copies":
         contract_metadata.max_copies = assert_json(value, "number", "save_contract_metadata.max_copies") ? (value.toU64() as i32) : 1;
