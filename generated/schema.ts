@@ -102,7 +102,7 @@ export class NftContractMetadata extends Entity {
     this.set("spec", Value.fromString(""));
     this.set("name", Value.fromString(""));
     this.set("symbol", Value.fromString(""));
-    this.set("mint_price", Value.fromBigInt(BigInt.zero()));
+    this.set("mint_price", Value.fromString(""));
     this.set("min_bid_amount", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -221,13 +221,13 @@ export class NftContractMetadata extends Entity {
     }
   }
 
-  get mint_price(): BigInt {
+  get mint_price(): string {
     let value = this.get("mint_price");
-    return value!.toBigInt();
+    return value!.toString();
   }
 
-  set mint_price(value: BigInt) {
-    this.set("mint_price", Value.fromBigInt(value));
+  set mint_price(value: string) {
+    this.set("mint_price", Value.fromString(value));
   }
 
   get max_copies(): i32 {
