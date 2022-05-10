@@ -240,7 +240,7 @@ type Bid @entity {
   "User who made the Bid"
   bidder: User!
   "NFT which is associated with the Bid"
-  recipient: Nft!
+  recipient: User!
   "Percentage of the amount that, on the next sale, goes to current owner, which after accepting bid becomes previous owner"
   sell_on_share: Int!
   "Currency used to bid"
