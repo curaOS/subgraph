@@ -50,7 +50,7 @@ export default function mint(
 
 function save_nft(token: JSONValue, contractAddress: string): Nft | null {
   // nft id is required or indexing will be skiped
-  const tokenId = token.toObject().get("id")!;
+  const tokenId = token.toObject().get("token_id")!;
   if (!assert_json(tokenId, "string", "mint.save_nft.id")) return null;
 
   // new Nft entity
@@ -108,7 +108,7 @@ function save_metadata(token: JSONValue, metadata: JSONValue): NftMetadata | nul
   // nft id
   const tokenId = token
     .toObject()
-    .get("id")!
+    .get("token_id")!
 
   // new NftMetadata entity with tokenId as id
   const nftMetadata = new NftMetadata(`${tokenId.toString()}`);
