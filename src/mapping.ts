@@ -1,10 +1,8 @@
-import { near, json, log } from "@graphprotocol/graph-ts";
+import { near, json } from "@graphprotocol/graph-ts";
 import { handleEvent } from "./handlers";
 
 import { assert_function_call } from "./utils/assert";
 import { getReceiptInfo } from "./utils/helpers";
-import {stringifyJson} from "./utils/debug";
-
 export function handleReceipt(receipt: near.ReceiptWithOutcome): void {
   // log.info('Receipt: ' + receipt, []);
 
@@ -30,8 +28,8 @@ function handleAction(
     return;
   }
 
-  // Parse the json object from receipt logs
-  const event = json.fromString(outcome.logs[0]);
+  // Parse the json object from receipt logs, remove NEAR EVENT_JSON hook from string before
+  const event = json.fromString(outcome.logs[0].replace('EVENT_JSON:',''));
 
   // Event handler that maps data to GraphQl entities
   handleEvent(event, info);
